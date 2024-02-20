@@ -19,7 +19,7 @@ deb-src http://deb.debian.org/debian bookworm-updates main non-free-firmware"
 echo "$new_sources_list" | sudo tee /etc/apt/sources.list > /dev/null
 apt update && apt full-upgrade -y && apt install -y net-tools mariadb-server mariadb-client postfix postfix-mysql dovecot-core dovecot-imapd dovecot-pop3d dovecot-lmtpd dovecot-mysql
 bootstrapdb(){
-    cat <<EOF | mysql -uroot
+    cat <<EOF | mysql -u root
         CREATE DATABASE IF NOT EXISTS $DATABASE;
         GRANT SELECT ON $DATABASE.* TO '$DB_USER'@'127.0.0.1' IDENTIFIED BY '$DB_USER_PASS';
         FLUSH PRIVILEGES;
@@ -59,16 +59,56 @@ EOF
 }
 bootstrapdb
 ##Configure postfix main.cf config
-postconf smtpd_recipient_restrictions="permit_sasl_authenticated, permit_mynetworks, reject_unauth_destination"
-postconf smtpd_sasl_auth_enable=yes
-postconf smtpd_sasl_path=private/auth
-postconf smtpd_sasl_type=dovecot
-postconf mydestination=localhost
-postconf myhostname=`hostname`
-postconf virtual_transport=lmtp:unix:private/dovecot-lmtp
-postconf virtual_mailbox_domains=mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
-postconf virtual_mailbox_maps=mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
-postconf virtual_alias_maps=mysql:/etc/postfix/mysql-virtual-alias-maps.cf
+postfix_main_cf="
+smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
+biff = no
+append_dot_mydomain = no
+readme_directory = no
+compatibility_level = 2
+append_dot_mydomain = no
+biff = no
+config_directory = /etc/postfix
+dovecot_destination_recipient_limit = 1
+smtpd_tls_cert_file=/etc/letsencrypt/live/PLACEHOLDER/fullchain.pem
+smtpd_tls_key_file=/etc/letsencrypt/live/PLACEHOLDER/privkey.pem
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous, noplaintext
+smtpd_sasl_tls_security_options = noanonymous
+smtpd_tls_auth_only = yes
+smtpd_tls_security_level = may
+smtpd_use_tls=yes
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+myhostname = PLACEHOLDER
+mydomain = PLACEHOLDER
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+myorigin = $mydomain
+mydestination = $myhostname, localhost.$mydomain, localhost
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 89.146.39.82/31
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+inet_protocols = all
+smtp_bind_address = 136.144.246.105
+smtp_bind_address6 = 2a01:7c8:d006:283:5054:ff:fe30:2a17
+smtpd_recipient_restrictions = permit_mynetworks
+home_mailbox = Maildir/
+virtual_transport = dovecot
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+virtual_mailbox_domains = mysql:/etc/postfix/virtual-mailbox-domains.conf
+virtual_mailbox_maps = mysql:/etc/postfix/virtual-mailbox-users.conf
+virtual_alias_maps = mysql:/etc/postfix/virtual-alias-maps.conf
+relayhost = vps.transip.email:587
+smtp_sasl_auth_enable = yes
+smtp_sasl_security_options = noanonymous
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_use_tls = yes
+smtp_tls_security_level = encrypt
+smtp_tls_note_starttls_offer = yes"
+echo "$postfix_main_cf" | sudo tee /etc/postfix/main.cf > /dev/null
 #set IFS to blank so we preserve new lines in multiline strings
 IFS=""
 echo "user = $DB_USER
