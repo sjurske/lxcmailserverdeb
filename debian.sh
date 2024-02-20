@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source <(curl -s https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/misc/build.func)
 # Copyright (c) 2024 Innervate B.V.
 # Authors: Reuben Smits & George America
 function header_info {
@@ -6,7 +7,7 @@ clear
 cat <<"EOF"
     CUSTOM DEBIAN LCX
 EOF
-#}
+}
 header_info
 echo -e "Loading..."
 APP="Debian"
