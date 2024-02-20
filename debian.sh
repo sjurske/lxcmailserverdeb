@@ -6,7 +6,7 @@ clear
 cat <<"EOF"
     CUSTOM DEBIAN LCX
 EOF
-}
+#}
 header_info
 echo -e "Loading..."
 APP="Debian"
