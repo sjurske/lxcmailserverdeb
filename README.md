@@ -7,27 +7,16 @@ This repository contains scripts designed to streamline the configuration of a m
 
 ## Requirements
 Before running these scripts, make sure your system meets the following requirements:
-- Debian operating system.
-- Internet connection to download necessary packages and updates.
-- Sufficient permissions to execute scripts.
+- Proxmox Host (tested on PVE 8.1.4)
+- Internet connection
+- Sufficient permissions (root access).
+- Install curl on Proxmox:
+```sh 
+apt update && apt install curl
+```
 
 ## Usage
-To use the scripts, choose one of the following methods:
-### Debian LCX 
-| Method    | Command                                                                                               |
-| :-------- | :---------------------------------------------------------------------------------------------------: |
-| **curl**  | `bash -c "$(curl -fsSL https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh`     |
-| **wget**  | `bash -c "$(wget -O- https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh)"`     |
-| **fetch** | `bash -c "$(fetch -o - https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh)"`   |
-### Mailserver 
-| Method    | Command                                                                                               |
-| :-------- | :---------------------------------------------------------------------------------------------------: |
-| **curl**  | `sh -c "$(curl -fsSL https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/mailserver.sh)"` |
-| **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/mailserver.sh)"`   |
-| **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/mailserver.sh)"` |
-### Nginx 
-| Method    | Command                                                                                               |
-| :-------- | :---------------------------------------------------------------------------------------------------: |
-| **curl**  | `sh -c "$(curl -fsSL https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/nginx.sh)"`      |
-| **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/nginx.sh)"`        |
-| **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/nginx.sh)"`      |
+Run the following command in Proxmox:
+```sh 
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh
+```
