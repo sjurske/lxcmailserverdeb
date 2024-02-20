@@ -18,9 +18,9 @@ To use the scripts, choose one of the following methods:
 ### Debian LCX 
 | Method    | Command                                                                                               |
 | :-------- | :---------------------------------------------------------------------------------------------------: |
-| **curl**  | `sh -c "$(curl -fsSL https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh)"`     |
-| **wget**  | `sh -c "$(wget -O- https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh)"`       |
-| **fetch** | `sh -c "$(fetch -o - https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh)"`     |
+| **curl**  | `bash -c "$(curl -fsSL https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh`     |
+| **wget**  | `bash -c "$(wget -O- https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh)"`     |
+| **fetch** | `bash -c "$(fetch -o - https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh)"`   |
 ### Mailserver 
 | Method    | Command                                                                                               |
 | :-------- | :---------------------------------------------------------------------------------------------------: |
