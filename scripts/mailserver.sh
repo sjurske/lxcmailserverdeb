@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 DB_PASS=$(<db_pw.md)
 E_PASS=$(<e_pw.md)
+PUB_IP=$(curl -s http://ifconfig.me)
 bootstrapdb(){
     cat <<EOF | mysql -u root
         CREATE DATABASE IF NOT EXISTS $DATABASE;
-        GRANT SELECT ON $DATABASE.* TO '$DB_USER'@'127.0.0.1' IDENTIFIED BY '$DB_USER_PASS';
+        GRANT SELECT ON $DATABASE.* TO '$DB_USER'@'127.0.0.1' IDENTIFIED BY '$DB_PASS';
         FLUSH PRIVILEGES;
         USE mailserver;
         CREATE TABLE IF NOT EXISTS virtual_domains (
@@ -37,7 +38,7 @@ bootstrapdb(){
         INSERT INTO mailserver.virtual_users
         (id, domain_id, password , email)
         VALUES
-        ('1', '1', ENCRYPT('$PASSWORD', CONCAT('\$6\$', SUBSTRING(SHA(RAND()), -16))), '$EMAIL');
+        ('1', '1', ENCRYPT('$E_PASS', CONCAT('\$6\$', SUBSTRING(SHA(RAND()), -16))), '$EMAIL');
 EOF
 }
 bootstrapdb
@@ -62,18 +63,18 @@ smtpd_use_tls=yes
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
-myhostname = PLACEHOLDER
-mydomain = PLACEHOLDER
+myhostname = $DOMAIN
+mydomain = $DOMAIN
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
-myorigin = $mydomain
-mydestination = $myhostname, localhost.$mydomain, localhost
-mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 89.146.39.82/31
+myorigin = $DOMAIN
+mydestination = $DOMAIN, localhost.$DOMAIN, localhost
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 89.146.39.82/31 $PUB_IP
 mailbox_size_limit = 0
 recipient_delimiter = +
 inet_interfaces = all
 inet_protocols = all
-smtp_bind_address = 136.144.246.105
+smtp_bind_address = $PUB_IP
 smtp_bind_address6 = 2a01:7c8:d006:283:5054:ff:fe30:2a17
 smtpd_recipient_restrictions = permit_mynetworks
 home_mailbox = Maildir/
@@ -92,6 +93,15 @@ smtp_tls_security_level = encrypt
 smtp_tls_note_starttls_offer = yes"
 echo "$postfix_main_cf" | sudo tee /etc/postfix/main.cf > /dev/null
 #set IFS to blank so we preserve new lines in multiline strings
+mysql_virtual_mailbox_domains_cf="
+user = $DB_USER
+password = $DB_USER_PASS
+hosts = 127.0.0.1
+dbname = $DATABASE
+query = SELECT 1 FROM virtual_domains WHERE name='%s'"
+echo "$mysql_virtual_mailbox_domains_cf" | tee > /etc/postfix/mysql-virtual-mailbox-domains.cf
+
+##NOT-FINISHED
 IFS=""
 echo "user = $DB_USER
 password = $DB_USER_PASS
