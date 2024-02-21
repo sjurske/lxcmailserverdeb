@@ -232,5 +232,6 @@ service dict {
 echo $dovecotmaster > /etc/dovecot/conf.d/10-master.conf
 service dovecot restart
 service postfix restart
-echo "\n\nYour mail server should be accessible now."
+printf "\n\n${BGreen}Your mail server should accessible after reboot...${Color_Off}\n\n"
+printf "${BWhite}\nBYE BYE (⌐■_■)\n\n"
 unset $IFS

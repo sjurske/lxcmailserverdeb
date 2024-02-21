@@ -11,4 +11,4 @@ echo "$new_sources_list" | sudo tee /etc/apt/sources.list > /dev/null
 apt update
 apt full-upgrade -y
 apt install -y htop net-tools mariadb-server mariadb-client postfix postfix-mysql dovecot-core dovecot-imapd dovecot-pop3d dovecot-lmtpd dovecot-mysql nginx certbot python3-certbot python3-certbot-nginx
-printf "\n\n\n${BGreen}----SOFTWARE INSTALLED AND UPDATED----${Color_Off}\n\n\n"
+printf "\n\n${BGreen}----SOFTWARE INSTALLED AND UPDATED----${Color_Off}\n\n"
