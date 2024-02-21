@@ -17,6 +17,6 @@ printf "${E_PASS}" > e_pw.md
 DB_PASS=$(generate_password)
 printf "Database Password: ${UWhite}${DB_PASS}${Color_Off}\n"
 printf "${DB_PASS}" > db_pw.md
-printf "--->Stored in 'e_pw.md' 'db_pw.md'\n"
+printf "Stored in 'e_pw.md' 'db_pw.md'\n"
 printf "${BYellow}DELETE OR MOVE THEM TO A SECURE PATH\n"
 printf "${Green}-----------------Password Generation Completed-------------------${Color_Off}\n\n"
