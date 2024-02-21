@@ -48,6 +48,7 @@ if [[ ! -d /var ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
 msg_info "Updating $APP LXC"
 apt-get update &>/dev/null
 apt-get -y upgrade &>/dev/null
+apt install curl git nano
 msg_ok "Updated $APP LXC"
 exit
 }
