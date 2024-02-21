@@ -86,11 +86,11 @@ done
 
 # Overview of settings
 printf "\n\n----------Overview of settings----------\n"
-echo "Hostname: $DOMAIN"
-echo "Domain: $DOMAIN"
-echo "E-Mail Address: $EMAIL"
-echo "Database Name: $DATABASE"
-echo "Database User Name: $DB_USER"
+printf "${Yellow}Hostname: $DOMAIN"
+printf "Domain: $DOMAIN"
+printf "E-Mail Address: $EMAIL"
+printf "Database Name: $DATABASE"
+printf "Database User Name: $DB_USER\n\n${Color_Off}"
 
 # Ask the user if the settings are correct
 read -p "Are these settings correct? (Y/N): " settings_correct
