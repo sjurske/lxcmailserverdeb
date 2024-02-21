@@ -108,7 +108,7 @@ if [[ "$settings_correct" =~ ^[Nn]$ ]]; then
     echo "Please input the settings again."
     # You may add code here to reset the hostname if needed
     # If needed, the script could also be modified to store the entered values to avoid re-entering
-    exit 1
+    continue
 fi
 
 # Call mailserver.sh script
