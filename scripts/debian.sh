@@ -59,5 +59,5 @@ function run_command_in_container() {
 start
 build_container
 description
-msg_ok "Completed Successfully Container!\n"
-run_command_in_container $CT_ID "$(curl -fsSL http://192.168.174.11/mailserver.sh)"
+msg_ok "Completed Successfully Container!\n\n"
+printf "Please continue in LXC Container Shell...\n"
