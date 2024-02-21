@@ -85,11 +85,11 @@ while ! validate_db_user "$DB_USER"; do
 done
 
 # Overview of settings
-printf "\n\n----------Overview of settings----------\n"
-printf "${Yellow}Hostname: $DOMAIN"
-printf "Domain: $DOMAIN"
-printf "E-Mail Address: $EMAIL"
-printf "Database Name: $DATABASE"
+printf "\n\n----------Overview of settings----------\n\n"
+printf "${Yellow}Hostname: $DOMAIN\n"
+printf "Domain: $DOMAIN\n"
+printf "E-Mail Address: $EMAIL\n"
+printf "Database Name: $DATABASE\n"
 printf "Database User Name: $DB_USER\n\n${Color_Off}"
 
 # Ask the user if the settings are correct
