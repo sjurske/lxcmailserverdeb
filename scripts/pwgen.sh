@@ -7,7 +7,7 @@ generate_password() {
     echo "$password"
 }
 
-printf "${Green}\n---------------------Generating Passwords------------------------${Color_Off}\n"
+printf "${Green}---------------------Generating Passwords------------------------${Color_Off}\n"
 # Generate password for EMAIL_PASS
 E_PASS=$(generate_password)
 printf "E-Mail Password: ${UWhite}${E_PASS}${Color_Off}\n"
@@ -19,4 +19,4 @@ printf "Database Password: ${UWhite}${DB_PASS}${Color_Off}\n"
 printf "${DB_PASS}" > db_pw.md
 printf "${Yellow}Stored in 'e_pw.md' 'db_pw.md'\n"
 printf "${BYellow}DELETE OR MOVE THEM TO A SECURE PATH\n"
-printf "${Green}-----------------Password Generation Completed-------------------${Color_Off}\n\n"
+printf "${Green}-----------------Password Generation Completed-------------------${Color_Off}\n"
