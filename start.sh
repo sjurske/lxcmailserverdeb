@@ -1,6 +1,21 @@
 #!/bin/bash
 source misc/color.func
 printf "${BGreen}\n\n-----------------------SCRIPT MENU--------------------------\n\n${Color_Off}"
+
+# Function to check if the script is run with root privileges
+check_root() {
+    if [ "$(id -u)" != "0" ]; then
+        printf "${Red}This script must be run as root${Color_Off}\n\n"
+        exit 1
+    fi
+}
+
+# Call the function to check root privileges
+check_root
+
+# Continue with the rest of the script
+printf "${Green}Script is running with root privileges${Color_Off}\n\n"
+
 # Function to validate email address
 validate_email() {
     local email=$1
