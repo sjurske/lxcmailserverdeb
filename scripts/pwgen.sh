@@ -7,7 +7,7 @@ generate_password() {
     echo "$password"
 }
 
-printf "${Green}---------------------Generating Passwords------------------------${Color_Off}\n\n"
+printf "${Green}\n---------------------Generating Passwords------------------------${Color_Off}\n"
 # Generate password for EMAIL_PASS
 E_PASS=$(generate_password)
 printf "Generated email password: ${UWhite}${E_PASS}${Color_Off}\n"
