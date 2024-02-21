@@ -1,8 +1,12 @@
 ## WORK IN PROGRESS
-THIS IS STILL A WIP PROJECT - README NOT UP TO DATE!
+THIS IS STILL A WIP PROJECT - USE AT OWN RISK!
 # Automated LXC mailserver container for Proxmox
 This repository contains scripts designed to streamline the configuration of a mail server on Debian Linux. These scripts aim to simplify the deployment process, which can be time-consuming when done manually. By executing the debian.sh script within a Proxmox shell (as root), users can set up a basic Debian Linux LXC Container efficiently. Upon completion, the script automatically triggers the configuration of the mail server. During this process, users are prompted to input variables, ensuring accurate placement within the required configuration files.
 ## Scripts
+Contains a menu easy script. Start by running in bash as root user:
+```sh 
+./start.sh
+```
 - `debian.sh`: Creates a LXC container in Proxmox.
 - `mailserver.sh`: Install and setup a mailserver inside Debian.
 - `nginx.sh`: Install and setup a nginx webserver.
