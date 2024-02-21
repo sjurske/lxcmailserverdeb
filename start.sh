@@ -100,6 +100,7 @@ done
 
 if [[ "$settings_correct" =~ ^[Yy]$ ]]; then
     printf "Great\n"
+    printf "Script will now generate corrosponding passwords...\n"
     bash scripts/pwgen.sh
 
 # If the settings are not correct, prompt the user to input the values again
@@ -111,16 +112,13 @@ if [[ "$settings_correct" =~ ^[Nn]$ ]]; then
     continue
 fi
 
-# Call mailserver.sh script
-bash mailserver.sh
-
 # Ask if nginx needs to be installed
-read -p "Do you want to install nginx? (Y/N): " install_nginx
-while ! validate_yes_no "$install_nginx"; do
-    read -p "Invalid input. Please enter Y or N: " install_nginx
+read -p "Do you want to install continue installing mailserver? (Y/N): " install_mailserver
+while ! validate_yes_no "$install_mailserver"; do
+    read -p "Invalid input. Please enter Y or N: " install_mailserver
 done
 
 # If nginx needs to be installed, call nginx.sh script
-if [[ "$install_nginx" =~ ^[Yy]$ ]]; then
+if [[ "$install_mailserver" =~ ^[Yy]$ ]]; then
     bash nginx.sh
 fi
