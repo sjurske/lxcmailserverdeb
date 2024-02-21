@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 # Copyright (c) 2024 Innervate B.V.
 # Authors: Reuben Smits & George America
-read -p 'Domein: ' DOMAIN
-read -p 'Email: ' EMAIL
-PASSWORD="Test123"
-DATABASE="mailserver"
-DB_USER="mail"
-DB_USER_PASS="mailpassword"
-export DEBIAN_FRONTEND=noninteractive
+
+#Generated password variables
+DB_PASS=$(<db_pw.md)
+E_PASS=$(<e_pw.md)
+
 # Update this list if out-of-date
 new_sources_list="
 deb http://deb.debian.org/debian bookworm main non-free-firmware
