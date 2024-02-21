@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source ../misc/color.func
+source misc/color.func
 new_sources_list="
 deb http://deb.debian.org/debian bookworm main non-free-firmware
 deb-src http://deb.debian.org/debian bookworm main non-free-firmware
