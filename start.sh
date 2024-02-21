@@ -100,16 +100,17 @@ done
 
 if [[ "$settings_correct" =~ ^[Yy]$ ]]; then
     printf "Great\n"
-    printf "Script will now generate corrosponding passwords...\n"
+    printf "Script will now generate corresponding passwords...\n"
     bash scripts/pwgen.sh
-
-# If the settings are not correct, prompt the user to input the values again
-if [[ "$settings_correct" =~ ^[Nn]$ ]]; then
-    # Restart from the beginning
-    echo "Please input the settings again."
-    # You may add code here to reset the hostname if needed
-    # If needed, the script could also be modified to store the entered values to avoid re-entering
-    continue
+else
+    # If the settings are not correct, prompt the user to input the values again
+    if [[ "$settings_correct" =~ ^[Nn]$ ]]; then
+        # Restart from the beginning
+        echo "Please input the settings again."
+        # You may add code here to reset the hostname if needed
+        # If needed, the script could also be modified to store the entered values to avoid re-entering
+        continue
+    fi
 fi
 
 # Ask if nginx needs to be installed
