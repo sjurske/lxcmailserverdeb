@@ -19,7 +19,7 @@ apt update && apt install curl
 ## Usage
 Run the following command in Proxmox for Debian LXC:
 ```sh 
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/sjurske/lxcmailserverdeb/main/scripts/debian.sh)"
 ```
 Run the following command in Debian LXC for mailserver:
 ```sh
