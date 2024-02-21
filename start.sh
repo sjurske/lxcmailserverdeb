@@ -120,5 +120,5 @@ done
 
 # If nginx needs to be installed, call nginx.sh script
 if [[ "$install_mailserver" =~ ^[Yy]$ ]]; then
-    bash nginx.sh
+    bash scripts/mailserver.sh
 fi
