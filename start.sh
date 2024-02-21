@@ -57,55 +57,49 @@ validate_yes_no() {
     fi
 }
 
-# Get the current hostname
-current_hostname=$(cat /etc/hostname)
+# Prompt the user to enter the domain
+read -p "Enter Domain Name: " DOMAIN
 
-# Prompt the user to check the current hostname
-read -p "Is the current hostname '$current_hostname' correct? (Y/N): " hostname_correct
-while ! validate_yes_no "$hostname_correct"; do
-    read -p "Invalid input. Please enter Y or N: " hostname_correct
-done
+# Set the domain as the hostname in '/etc/hostname'
+echo "$DOMAIN" | sudo tee /etc/hostname
 
-# If the hostname is not correct, prompt the user to enter the new hostname
-if [[ "$hostname_correct" =~ ^[Nn]$ ]]; then
-    read -p "Enter the new hostname: " myhostname
-    sudo hostnamectl set-hostname "$myhostname"
-    echo "Hostname changed to $myhostname"
-else
-    myhostname=$current_hostname
-fi
+# Set hostname using hostnamectl
+sudo hostnamectl set-hostname "$DOMAIN"
 
 # Prompt the user to enter the email address
-read -p "Enter EMAIL: " EMAIL
+read -p "Enter E-Mail Address: " EMAIL
 while ! validate_email "$EMAIL"; do
-    read -p "Invalid input. Please enter a valid EMAIL: " EMAIL
+    read -p "Invalid input. Please enter a valid E-Mail Address: " EMAIL
 done
 
 # Prompt the user to enter the database name
-read -p "Enter DATABASE: " DATABASE
+read -p "Enter Database Name: " DATABASE
 while ! validate_database "$DATABASE"; do
-    read -p "Invalid input. Please enter a valid DATABASE: " DATABASE
+    read -p "Invalid input. Please enter a valid Database Name: " DATABASE
 done
 
 # Prompt the user to enter the database username
-read -p "Enter DB_USER: " DB_USER
+read -p "Enter Database Username: " DB_USER
 while ! validate_db_user "$DB_USER"; do
-    read -p "Invalid input. Please enter a valid DB_USER: " DB_USER
+    read -p "Invalid input. Please enter a valid Database Username: " DB_USER
 done
 
 # Overview of settings
-bash pwgen.sh
 echo "Overview of settings:"
-echo "Hostname: $myhostname"
-echo "EMAIL: $EMAIL"
-echo "DATABASE: $DATABASE"
-echo "DB_USER: $DB_USER"
+echo "Hostname: $DOMAIN"
+echo "Domain: $DOMAIN"
+echo "E-Mail Address: $EMAIL"
+echo "Database Name: $DATABASE"
+echo "Database User Name: $DB_USER"
 
 # Ask the user if the settings are correct
 read -p "Are these settings correct? (Y/N): " settings_correct
 while ! validate_yes_no "$settings_correct"; do
     read -p "Invalid input. Please enter Y or N: " settings_correct
 done
+
+if [[ "$settings_correct" =~ ^[Yy]$ ]]; then
+    bash scripts/pwgen.sh
 
 # If the settings are not correct, prompt the user to input the values again
 if [[ "$settings_correct" =~ ^[Nn]$ ]]; then
