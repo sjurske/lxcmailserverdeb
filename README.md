@@ -12,13 +12,16 @@ Before running these scripts, make sure your system meets the following requirem
 - Proxmox Host (tested on PVE 8.1.4)
 - Internet connection
 - Sufficient permissions (root access).
-- Install curl on Proxmox:
+- curl on Proxmox:
 ```sh 
 apt update && apt install curl
 ```
-
 ## Usage
-Run the following command in Proxmox:
+Run the following command in Proxmox for Debian LXC:
 ```sh 
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/debian.sh
+```
+Run the following command in Debian LXC for mailserver:
+```sh
+apt install -y git && git clone https://github.com/sjurske/lxcmailserverdeb.git && cd lxcmailserverdeb && ./start.sh
 ```
