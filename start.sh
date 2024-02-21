@@ -1,7 +1,8 @@
 #!/bin/bash
 source misc/color.func
-printf "${BGreen}\n\n-----------------------SCRIPT MENU--------------------------\n\n${Color_Off}"
+source /etc/hostname
 
+printf "${BGreen}\n\n-----------------------SCRIPT MENU--------------------------\n\n${Color_Off}"
 # Function to check if the script is run with root privileges
 check_root() {
     if [ "$(id -u)" != "0" ]; then
