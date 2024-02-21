@@ -100,7 +100,7 @@ done
 
 if [[ "$settings_correct" =~ ^[Yy]$ ]]; then
     printf "Great\n"
-    printf "Script will now generate corresponding passwords...\n"
+    printf "Script will now generate corresponding passwords...\n\n"
     bash scripts/pwgen.sh
 else
     # If the settings are not correct, prompt the user to input the values again
