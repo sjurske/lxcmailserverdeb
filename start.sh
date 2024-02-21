@@ -99,6 +99,7 @@ while ! validate_yes_no "$settings_correct"; do
 done
 
 if [[ "$settings_correct" =~ ^[Yy]$ ]]; then
+    printf "Great\n"
     bash scripts/pwgen.sh
 
 # If the settings are not correct, prompt the user to input the values again
