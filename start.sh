@@ -19,8 +19,8 @@ printf "${Green}Script is running with root privileges${Color_Off}\n\n"
 
 # Function to validate email address
 validate_email() {
-    local email=$1
-    if [[ "$email" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
+    local EMAIL=$1
+    if [[ "$EMAIL" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
         return 0
     else
         return 1
@@ -29,8 +29,8 @@ validate_email() {
 
 # Function to validate database name
 validate_database() {
-    local database=$1
-    if [[ "$database" =~ ^[a-zA-Z0-9_]+$ ]]; then
+    local DATABASE=$1
+    if [[ "$DATABASE" =~ ^[a-zA-Z0-9_]+$ ]]; then
         return 0
     else
         return 1
@@ -39,8 +39,8 @@ validate_database() {
 
 # Function to validate database username
 validate_db_user() {
-    local db_user=$1
-    if [[ "$db_user" =~ ^[a-zA-Z0-9_]+$ ]]; then
+    local DB_USER=$1
+    if [[ "$DB_USER" =~ ^[a-zA-Z0-9_]+$ ]]; then
         return 0
     else
         return 1
@@ -61,10 +61,10 @@ validate_yes_no() {
 read -p "Enter Domain Name: " DOMAIN
 
 # Set the domain as the hostname in '/etc/hostname'
-echo "$DOMAIN" | sudo tee /etc/hostname
+echo "$DOMAIN" | tee /etc/hostname
 
 # Set hostname using hostnamectl
-sudo hostnamectl set-hostname "$DOMAIN"
+hostnamectl set-hostname "$DOMAIN"
 
 # Prompt the user to enter the email address
 read -p "Enter E-Mail Address: " EMAIL
@@ -85,7 +85,7 @@ while ! validate_db_user "$DB_USER"; do
 done
 
 # Overview of settings
-echo "Overview of settings:"
+printf "\n\n----------Overview of settings----------\n"
 echo "Hostname: $DOMAIN"
 echo "Domain: $DOMAIN"
 echo "E-Mail Address: $EMAIL"
