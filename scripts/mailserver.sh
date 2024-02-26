@@ -7,6 +7,17 @@ printf "\n\n${BGreen}Start and enable required services...${Color_Off}\n\n"
 systemctl start mariadb && systemctl enable mariadb
 systemctl start postfix && systemctl enable postfix
 systemctl start dovecot && systemctl enable dovecot
+
+# TESTCHECK
+printf "$DATABASE"
+printf "$DOMAIN"
+printf "$DB_USER"
+printf "$DB_PASS"
+printf "$E_PASS"
+printf "$EMAIL"
+
+read -p "Press Enter to continue..."
+
 printf "\n\n${BGreen}Configuring server files...${Color_Off}\n\n"
 bootstrapdb () {
   printf "$DATABASE"
@@ -29,8 +40,8 @@ EOF
 }
 bootstrapdb
 
-postfix_main_cf="
-smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
+postfix_main_cf=$(cat <<EOF
+smtpd_banner = $DOMAIN ESMTP mail.$DOMAIN (Debian/GNU)
 biff = no
 append_dot_mydomain = no
 readme_directory = no
@@ -39,16 +50,16 @@ append_dot_mydomain = no
 biff = no
 config_directory = /etc/postfix
 dovecot_destination_recipient_limit = 1
-smtpd_tls_cert_file=/etc/letsencrypt/live/PLACEHOLDER/fullchain.pem
-smtpd_tls_key_file=/etc/letsencrypt/live/PLACEHOLDER/privkey.pem
+smtpd_tls_cert_file=/etc/letsencrypt/live/mail.$DOMAIN/fullchain.pem
+smtpd_tls_key_file=/etc/letsencrypt/live/mail.$DOMAIN/privkey.pem
 smtpd_sasl_auth_enable = yes
 smtpd_sasl_security_options = noanonymous, noplaintext
 smtpd_sasl_tls_security_options = noanonymous
 smtpd_tls_auth_only = yes
 smtpd_tls_security_level = may
 smtpd_use_tls=yes
-smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
-smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtpd_tls_session_cache_database = btree:\${data_directory}/smtpd_scache
+smtp_tls_session_cache_database = btree:\${data_directory}/smtp_scache
 smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
 myhostname = $DOMAIN
 mydomain = $DOMAIN
@@ -77,13 +88,19 @@ smtp_sasl_security_options = noanonymous
 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 smtp_use_tls = yes
 smtp_tls_security_level = encrypt
-smtp_tls_note_starttls_offer = yes"
+smtp_tls_note_starttls_offer = yes
+EOF
+)
+
 echo "$postfix_main_cf" | sudo tee /etc/postfix/main.cf > /dev/null
+
 #set IFS to blank so we preserve new lines in multiline strings
-mysql_virtual_mailbox_domains_cf="
+mysql_virtual_mailbox_domains_cf=$(cat <<EOF
 user = $DB_USER
 password = $DB_PASS
 hosts = 127.0.0.1
 dbname = $DATABASE
 query = SELECT 1 FROM virtual_domains WHERE name='%s'"
+EOF
+)
 echo "$mysql_virtual_mailbox_domains_cf" | tee > /etc/postfix/mysql-virtual-mailbox-domains.cf
