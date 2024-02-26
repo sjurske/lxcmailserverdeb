@@ -54,7 +54,7 @@ install_proxmox_lxc() {
 
 install_mailserver() {
     printf "Installing Mailserver...\n"
-    get_variables
+    set_variables
     install_mailserver
 }
 
@@ -83,6 +83,7 @@ set_variables() {
     DB_PASS=$(<db_pw.md)
     E_PASS=$(<e_pw.md)
     PUB_IP=$(curl -s http://ifconfig.me)
+    list_variables
 }
 
 list_variables() {
@@ -105,7 +106,7 @@ list_variables() {
         
     else
         printf "Please input the settings again.\n"
-        install_mailserver
+        set_variables
     fi
 }
 
