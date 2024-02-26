@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source <(curl -s https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/misc/build.func)
+source misc/color.func
 function header_info {
 clear
 cat << EOF
@@ -44,5 +45,5 @@ start
 build_container
 description
 msg_ok "Completed Successfully Containe\n"
-printf "Please continue in LXC Container Shell and run this command:\n"
+printf "${cyan}Please continue in LXC Container Shell and run this command:${Color_Off}\n"
 printf "apt install -y git && git clone https://github.com/sjurske/lxcmailserverdeb.git && cd lxcmailserverdeb && ./start.sh\n\n"
