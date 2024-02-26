@@ -131,7 +131,7 @@ main_menu() {
             *) printf "${Red}Invalid choice. Please enter correct value${Color_Off}\n\n" ;;
         esac
     else
-        read -p "Do you want to install a Debian LXC on this host? (Y/N):${Color_Off} " install_lxc_choice
+        read -p "Do you want to install a Debian LXC on this host? (Y/N): " install_lxc_choice
         if [[ "$install_lxc_choice" =~ ^[Yy]$ ]]; then
             install_proxmox_lxc
         else
