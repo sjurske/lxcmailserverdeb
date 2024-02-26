@@ -3,10 +3,10 @@ source misc/color.func
 
 check_device() {
     if hostnamectl status | grep -q "Virtualization:"; then
-        printf "${BGreen}This is a virtual machine${Color_Off}\n\n"
+        printf "${Green}Virtual Machine: YES${Color_Off}\n\n"
         return 0
     else
-        printf "${BRed}This is not a virtual machine${Color_Off}\n\n"
+        printf "${Red}Virtual Machine: NO${Color_Off}\n\n"
         return 1
     fi
 }
@@ -132,12 +132,12 @@ main_menu() {
         esac
     else
         printf "${BGreen}-----------------------OPTION--------------------------${Color_Off}\n"
-        printf "1. Install Debian LXC (HOST ONLY)\n\n"
-        read -p "Enter your choice: " choice
-        case $choice in
-            1) install_proxmox_lxc ;;
-            *) printf "${Red}Invalid choice. Please enter correct value${Color_Off}\n\n" ;;
-        esac
+        read -p "Do you want to install a Debian LXC on this host? (Y/N): " install_lxc_choice
+        if [[ "$install_lxc_choice" =~ ^[Yy]$ ]]; then
+            install_proxmox_lxc
+        else
+            printf "${Red}Invalid choice. Please enter correct value${Color_Off}\n\n"
+        fi
     fi
 }
 
