@@ -92,10 +92,15 @@ install_mailserver() {
     fi
 }
 
+install_nginx() {
+    printf "${BRed}FUNCTION NOT COMPLETE\n"
+}
+
 main_menu() {
     printf "${BGreen}\n\n-----------------------SCRIPT MENU--------------------------\n\n${Color_Off}"
-    printf "1. Install Proxmox LXC Debian\n"
-    printf "2. Install Mailserver in a Debian machine\n\n"
+    printf "1. Install Debian LXC (HOST ONLY)\n"
+    printf "2. Install Postfix & Dovecot Mailserver\n"
+    printf "3. Install Nginx Webserver\n\n"
     read -p "Enter your choice (1 or 2): " choice
     case $choice in
         1) install_proxmox_lxc ;;
