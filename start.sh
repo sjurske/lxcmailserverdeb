@@ -4,10 +4,10 @@ source misc/color.func
 
 check_root() {
     if [ "$(id -u)" != "0" ]; then
-        printf "${Red}Running as root - NO\nExiting Script...${Color_Off}\n"
+        printf "${Red}Running as root - NO\nExiting Script...${Color_Off}\n\n"
         exit 1
     else
-        printf "${Green}Running as root - OK${Color_Off}\n"
+        printf "${Green}Running as root - OK${Color_Off}\n\n"
     fi   
 }
 
@@ -98,7 +98,7 @@ install_nginx() {
 }
 
 main_menu() {
-    printf "${BGreen}\n-----------------------SCRIPT MENU--------------------------\n\n${Color_Off}"
+    printf "${BGreen}-----------------------SCRIPT MENU--------------------------${Color_Off}"
     check_root
     printf "1. Install Debian LXC (HOST ONLY)\n"
     printf "2. Install Postfix & Dovecot Mailserver\n"
