@@ -13,10 +13,10 @@ check_device() {
 
 check_root() {
     if [ "$(id -u)" != "0" ]; then
-        printf "${Red}Running as root - NO\nExiting Script...${Color_Off}\n\n"
+        printf "${Red}Running as root - NO\nExiting Script...${Color_Off}\n"
         exit 1
     else
-        printf "${Green}Running as root - OK${Color_Off}\n\n"
+        printf "${Green}Running as root - OK${Color_Off}\n"
     fi   
 }
 
