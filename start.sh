@@ -79,13 +79,11 @@ install_mailserver() {
         read -p "Invalid input. Please enter Y or N: " settings_correct
     done
     if [[ "$settings_correct" =~ ^[Yy]$ ]]; then
-        printf "Great\n\n"
-        printf "${BGreen}Installing & Updating required software${Color_Off}\n"
-        bash scripts deps.sh
-        printf "\n\n"
-        bash scripts/pwgen.sh
+        printf "Great\n"
         printf "\n${BGreen}Running Mailserver installation script${Color_Off}\n"
         bash scripts/mailserver.sh
+        printf "\n${BGreen}Installing & Updating required software${Color_Off}\n"
+        bash scripts/deps.sh
     else
         printf "Please input the settings again.\n"
         install_mailserver

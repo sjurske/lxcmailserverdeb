@@ -2,6 +2,11 @@
 DB_PASS=$(<db_pw.md)
 E_PASS=$(<e_pw.md)
 PUB_IP=$(curl -s http://ifconfig.me)
+printf "${BGreen}Installing & Updating required software${Color_Off}\n"
+bash scripts deps.sh
+printf "\n\n"
+bash scripts/pwgen.sh
+printf "${BGreen}Configuring server files...${Color_Off}\n\n"
 bootstrapdb(){
     cat <<EOF | mysql -u root
         CREATE DATABASE IF NOT EXISTS $DATABASE;
