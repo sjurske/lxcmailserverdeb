@@ -93,7 +93,7 @@ install_mailserver() {
 }
 
 install_nginx() {
-    printf "${BRed}FUNCTION NOT COMPLETE\n"
+    printf "${BRed}FUNCTION NOT COMPLETE${Color_Off}\n"
 }
 
 main_menu() {
