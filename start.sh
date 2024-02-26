@@ -46,8 +46,10 @@ validate_yes_no() {
 }
 
 install_proxmox_lxc() {
-    printf "Running Proxmox LXC Debian installation script...\n"
+    printf "Running Proxmox LXC Debian installation script...\n\n"
     bash scripts/debian.sh
+    printf "If completed run the following command inside the Debian LXC Container:\n"
+    printf "apt install -y git && git clone https://github.com/sjurske/lxcmailserverdeb.git && cd lxcmailserverdeb && ./start.sh"
 }
 
 install_mailserver() {
