@@ -100,7 +100,8 @@ main_menu() {
     case $choice in
         1) install_proxmox_lxc ;;
         2) install_mailserver ;;
-        *) printf "${Red}Invalid choice. Please enter 1 or 2.${Color_Off}\n\n" ;;
+        3) install_nginx ;;
+        *) printf "${Red}Invalid choice. Please enter correct value${Color_Off}\n\n" ;;
     esac
 }
 
