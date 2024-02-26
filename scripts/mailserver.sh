@@ -3,11 +3,11 @@ printf "\n${BGreen}Installing & Updating required software${Color_Off}\n"
 bash misc/main_deps.sh
 bash misc/update_sources.sh
 bash misc/mailserver_deps.sh
-printf "$\n\n${BGreen}Start and enable required services...${Color_Off}\n\n"
+printf "\n\n${BGreen}Start and enable required services...${Color_Off}\n\n"
 systemctl start mariadb && systemctl enable mariadb
 systemctl start postfix && systemctl enable postfix
 systemctl start dovecot && systemctl enable dovecot
-printf "$\n\n${BGreen}Configuring server files...${Color_Off}\n\n"
+printf "\n\n${BGreen}Configuring server files...${Color_Off}\n\n"
 bootstrapdb () {
   printf "$DATABASE"
   printf "$DOMAIN"
