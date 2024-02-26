@@ -4,7 +4,7 @@ source misc/color.func
 
 check_root() {
     if [ "$(id -u)" != "0" ]; then
-        printf "${Red}This script must be run as root${Color_Off}\n\n"
+        printf "${Red}This script must be run as root${Color_Off}\n"
         exit 1
     fi
 }
@@ -68,7 +68,7 @@ install_mailserver() {
         read -p "Invalid input. Please enter a valid Database Username: " DB_USER
     done
 
-    printf "\n\n----------Overview of settings----------\n\n"
+    printf "\n----------Overview of settings----------\n\n"
     printf "${Yellow}Hostname: $DOMAIN\n"
     printf "Domain: $DOMAIN\n"
     printf "E-Mail Address: $EMAIL\n"
