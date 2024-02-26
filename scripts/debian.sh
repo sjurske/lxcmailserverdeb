@@ -43,5 +43,6 @@ function default_settings() {
 start
 build_container
 description
-msg_ok "Completed Successfully Container!\n\n"
-printf "Please continue in LXC Container Shell...\n"
+msg_ok "Completed Successfully Containe\n"
+printf "Please continue in LXC Container Shell and run this command:\n"
+printf "apt install -y git && git clone https://github.com/sjurske/lxcmailserverdeb.git && cd lxcmailserverdeb && ./start.sh\n\n"
