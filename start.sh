@@ -51,9 +51,41 @@ install_proxmox_lxc() {
 }
 
 install_mailserver() {
-    printf "Running mailserver installation script...\n"
-    bash scripts/deps.sh
-    bash scripts/mailserver.sh
+    printf "Installing Mailserver...\n"
+    read -p "Enter Domain Name: " DOMAIN
+    echo "$DOMAIN" | tee /etc/hostname
+    hostnamectl set-hostname "$DOMAIN"
+    read -p "Enter E-Mail Address: " EMAIL
+    while ! validate_email "$EMAIL"; do
+        read -p "Invalid input. Please enter a valid E-Mail Address: " EMAIL
+    done
+    read -p "Enter Database Name: " DATABASE
+    while ! validate_database "$DATABASE"; do
+        read -p "Invalid input. Please enter a valid Database Name: " DATABASE
+    done
+    read -p "Enter Database Username: " DB_USER
+    while ! validate_db_user "$DB_USER"; do
+        read -p "Invalid input. Please enter a valid Database Username: " DB_USER
+    done
+
+    printf "\n\n----------Overview of settings----------\n\n"
+    printf "${Yellow}Hostname: $DOMAIN\n"
+    printf "Domain: $DOMAIN\n"
+    printf "E-Mail Address: $EMAIL\n"
+    printf "Database Name: $DATABASE\n"
+    printf "Database User Name: $DB_USER\n\n${Color_Off}"
+    read -p "Are these settings correct? (Y/N): " settings_correct
+    while ! validate_yes_no "$settings_correct"; do
+        read -p "Invalid input. Please enter Y or N: " settings_correct
+    done
+    if [[ "$settings_correct" =~ ^[Yy]$ ]]; then
+        printf "Great\n"
+        printf "Script will now generate corresponding passwords...\n\n"
+        bash scripts/pwgen.sh
+    else
+        printf "Please input the settings again.\n"
+        install_mailserver
+    fi
 }
 
 main_menu() {
@@ -70,13 +102,5 @@ main_menu() {
 
 check_root
 printf "${Green}Script is running with root privileges${Color_Off}\n\n"
-
-if [[ "$1" == "--proxmox" ]]; then
-    read -p "Do you want to install a Debian LXC Container? (Y/N): " lxc_container
-    if [[ "$lxc_container" =~ ^[Yy]$ ]]; then
-        install_proxmox_lxc
-        exit 0
-    fi
-fi
 
 main_menu
