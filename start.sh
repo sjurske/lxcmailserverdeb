@@ -109,10 +109,8 @@ list_variables() {
     done
     if [[ "$settings_correct" =~ ^[Yy]$ ]]; then
         printf "Great\n"
-        printf "\n${BGreen}Running Mailserver installation script${Color_Off}\n"
         export DOMAIN EMAIL DATABASE DB_USER DB_PASS E_PASS PUB_IP
-        bash scripts/mailserver.sh
-        
+        exec bash && printf "\n${BGreen}Running Mailserver installation script${Color_Off}\n" && bash scripts/mailserver.sh   
     else
         printf "Please input the settings again.\n"
         set_variables
