@@ -1,6 +1,13 @@
 #!/bin/bash
-
 source misc/color.func
+
+check_device() {
+    if hostnamectl status | grep -q "Virtualization:"; then
+        printf "${BGreen}This is a virtual machine${Color_Off}\n\n"
+    else
+        printf "${BRed}This is not a virtual machine${Color_Off}\n\n"
+    fi
+}
 
 check_root() {
     if [ "$(id -u)" != "0" ]; then
@@ -110,6 +117,7 @@ list_variables() {
 }
 
 main_menu() {
+    check_device
     printf "${BGreen}-----------------------OPTION--------------------------${Color_Off}\n"
     printf "1. Install Debian LXC (HOST ONLY)\n"
     printf "2. Install Postfix & Dovecot Mailserver\n"
