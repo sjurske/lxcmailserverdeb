@@ -55,7 +55,6 @@ install_proxmox_lxc() {
 install_mailserver() {
     printf "Installing Mailserver...\n"
     set_variables
-    install_mailserver
 }
 
 install_nginx() {
