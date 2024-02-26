@@ -135,7 +135,7 @@ echo_default() {
   echo -e "${DGN}Using Static IP Address: ${BGN}dhcp${CL}"
   echo -e "${DGN}Using Gateway IP Address: ${BGN}Default${CL}"
   echo -e "${DGN}Using Apt-Cacher IP Address: ${BGN}Default${CL}"
-  echo -e "${DGN}Disable IPv6: ${BGN}No${CL}"
+  echo -e "${DGN}Disable IPv6: ${BGN}Yes${CL}"
   echo -e "${DGN}Using Interface MTU Size: ${BGN}Default${CL}"
   echo -e "${DGN}Using DNS Search Domain: ${BGN}Host${CL}"
   echo -e "${DGN}Using DNS Server Address: ${BGN}Host${CL}"
