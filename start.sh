@@ -4,8 +4,10 @@ source misc/color.func
 check_device() {
     if hostnamectl status | grep -q "Virtualization:"; then
         printf "${BGreen}This is a virtual machine${Color_Off}\n\n"
+        return 0
     else
         printf "${BRed}This is not a virtual machine${Color_Off}\n\n"
+        return 1
     fi
 }
 
@@ -117,18 +119,26 @@ list_variables() {
 }
 
 main_menu() {
-    check_device
-    printf "${BGreen}-----------------------OPTION--------------------------${Color_Off}\n"
-    printf "1. Install Debian LXC (HOST ONLY)\n"
-    printf "2. Install Postfix & Dovecot Mailserver\n"
-    printf "3. Install Nginx Webserver\n\n"
-    read -p "Enter your choice: " choice
-    case $choice in
-        1) install_proxmox_lxc ;;
-        2) install_mailserver ;;
-        3) install_nginx ;;
-        *) printf "${Red}Invalid choice. Please enter correct value${Color_Off}\n\n" ;;
-    esac
+    check_root
+    if check_device; then
+        printf "${BGreen}-----------------------OPTION--------------------------${Color_Off}\n"
+        printf "2. Install Postfix & Dovecot Mailserver\n"
+        printf "3. Install Nginx Webserver\n\n"
+        read -p "Enter your choice: " choice
+        case $choice in
+            2) install_mailserver ;;
+            3) install_nginx ;;
+            *) printf "${Red}Invalid choice. Please enter correct value${Color_Off}\n\n" ;;
+        esac
+    else
+        printf "${BGreen}-----------------------OPTION--------------------------${Color_Off}\n"
+        printf "1. Install Debian LXC (HOST ONLY)\n\n"
+        read -p "Enter your choice: " choice
+        case $choice in
+            1) install_proxmox_lxc ;;
+            *) printf "${Red}Invalid choice. Please enter correct value${Color_Off}\n\n" ;;
+        esac
+    fi
 }
-check_root
+
 main_menu
