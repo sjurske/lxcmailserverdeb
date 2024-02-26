@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+exec bash
+clear
 printf "\n${BGreen}Installing & Updating required software${Color_Off}\n"
 bash misc/main_deps.sh
 bash misc/update_sources.sh
