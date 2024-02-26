@@ -101,7 +101,7 @@ main_menu() {
     printf "1. Install Debian LXC (HOST ONLY)\n"
     printf "2. Install Postfix & Dovecot Mailserver\n"
     printf "3. Install Nginx Webserver\n\n"
-    read -p "Enter your choice (1 or 2): " choice
+    read -p "Enter your choice: " choice
     case $choice in
         1) install_proxmox_lxc ;;
         2) install_mailserver ;;
