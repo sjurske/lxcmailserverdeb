@@ -54,6 +54,16 @@ install_proxmox_lxc() {
 
 install_mailserver() {
     printf "Installing Mailserver...\n"
+    get_variables
+    install_mailserver
+}
+
+install_nginx() {
+    printf "${BRed}FUNCTION NOT COMPLETE${Color_Off}\n"
+    main_menu
+}
+
+set_variables() {
     read -p "Enter Domain Name: " DOMAIN
     echo "$DOMAIN" | tee /etc/hostname
     hostnamectl set-hostname "$DOMAIN"
@@ -69,14 +79,22 @@ install_mailserver() {
     while ! validate_db_user "$DB_USER"; do
         read -p "Invalid input. Please enter a valid Database Username: " DB_USER
     done
+    bash scripts/pwgen.sh
+    DB_PASS=$(<db_pw.md)
+    E_PASS=$(<e_pw.md)
+    PUB_IP=$(curl -s http://ifconfig.me)
+}
 
+list_variables() {
     printf "\n----------Overview of settings----------\n\n"
     printf "${Yellow}Hostname: $DOMAIN\n"
     printf "Domain: $DOMAIN\n"
     printf "E-Mail Address: $EMAIL\n"
+    printf "E-Mail Password: $E_PASS\n"
     printf "Database Name: $DATABASE\n"
-    printf "Database User Name: $DB_USER\n\n${Color_Off}"
-    read -p "Are these settings correct? (Y/N): " settings_correct
+    printf "Database User Name: $DB_USER\n${Color_Off}"
+    printf "DB_PASS: $DB_PASS\n"
+    read -p "\nAre these settings correct? (Y/N): " settings_correct
     while ! validate_yes_no "$settings_correct"; do
         read -p "Invalid input. Please enter Y or N: " settings_correct
     done
@@ -84,17 +102,11 @@ install_mailserver() {
         printf "Great\n"
         printf "\n${BGreen}Running Mailserver installation script${Color_Off}\n"
         bash scripts/mailserver.sh
-        printf "\n${BGreen}Installing & Updating required software${Color_Off}\n"
-        bash scripts/deps.sh
+        
     else
         printf "Please input the settings again.\n"
         install_mailserver
     fi
-}
-
-install_nginx() {
-    printf "${BRed}FUNCTION NOT COMPLETE${Color_Off}\n"
-    main_menu
 }
 
 main_menu() {

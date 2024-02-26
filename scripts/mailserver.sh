@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
-DB_PASS=$(<db_pw.md)
-E_PASS=$(<e_pw.md)
-PUB_IP=$(curl -s http://ifconfig.me)
-printf "${BGreen}Installing & Updating required software${Color_Off}\n"
-bash scripts deps.sh
-printf "\n\n"
-bash scripts/pwgen.sh
-printf "${BGreen}Configuring server files...${Color_Off}\n\n"
+printf "\n${BGreen}Installing & Updating required software${Color_Off}\n"
+bash misc/main_deps.sh
+bash misc/update_sources.sh
+bash misc/mailserver_deps.sh
+printf "$\n\n${BGreen}Configuring server files...${Color_Off}\n\n"
 bootstrapdb(){
     cat <<EOF | mysql -u root
         CREATE DATABASE IF NOT EXISTS $DATABASE;
