@@ -9,6 +9,12 @@ systemctl start postfix && systemctl enable postfix
 systemctl start dovecot && systemctl enable dovecot
 printf "$\n\n${BGreen}Configuring server files...${Color_Off}\n\n"
 bootstrapdb () {
+  printf "$DATABASE"
+  printf "$DOMAIN"
+  printf "$DB_USER"
+  printf "$DB_PASS"
+  printf "$E_PASS"
+  printf "$EMAIL"
   mysql -u root <<EOF
 CREATE DATABASE IF NOT EXISTS $DATABASE;
 GRANT SELECT ON $DATABASE.* TO '$DB_USER'@'127.0.0.1' IDENTIFIED BY '$DB_PASS';
