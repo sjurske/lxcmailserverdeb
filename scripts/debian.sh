@@ -46,4 +46,4 @@ build_container
 description
 msg_ok "Completed Successfully Containe\n"
 printf "${Cyan}Please continue in LXC Container Shell and run this command:${Color_Off}\n"
-printf "apt install -y git && git clone https://github.com/sjurske/lxcmailserverdeb.git && cd lxcmailserverdeb && ./start.sh\n\n"
+printf "${UCyan}apt install -y git && git clone https://github.com/sjurske/lxcmailserverdeb.git && cd lxcmailserverdeb && ./start.sh${Color_Off}\n\n"
