@@ -98,7 +98,7 @@ install_nginx() {
 }
 
 main_menu() {
-    printf "${BGreen}-----------------------SCRIPT MENU--------------------------${Color_Off}\n"
+    printf "${BGreen}-----------------------OPTION--------------------------${Color_Off}\n"
     printf "1. Install Debian LXC (HOST ONLY)\n"
     printf "2. Install Postfix & Dovecot Mailserver\n"
     printf "3. Install Nginx Webserver\n\n"
