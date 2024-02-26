@@ -4,9 +4,11 @@ source misc/color.func
 
 check_root() {
     if [ "$(id -u)" != "0" ]; then
-        printf "${Red}This script must be run as root${Color_Off}\n"
+        printf "${Red}Running as root - NO\nExiting Script...${Color_Off}\n"
         exit 1
-    fi
+    else
+        printf "${Green}Running as root - OK${Color_Off}\n"
+    fi   
 }
 
 validate_email() {
@@ -96,7 +98,8 @@ install_nginx() {
 }
 
 main_menu() {
-    printf "${BGreen}\n\n-----------------------SCRIPT MENU--------------------------\n\n${Color_Off}"
+    printf "${BGreen}\n-----------------------SCRIPT MENU--------------------------\n\n${Color_Off}"
+    check_root
     printf "1. Install Debian LXC (HOST ONLY)\n"
     printf "2. Install Postfix & Dovecot Mailserver\n"
     printf "3. Install Nginx Webserver\n\n"
@@ -108,8 +111,4 @@ main_menu() {
         *) printf "${Red}Invalid choice. Please enter correct value${Color_Off}\n\n" ;;
     esac
 }
-
-check_root
-printf "${Green}Script is running with root privileges${Color_Off}\n\n"
-
 main_menu
