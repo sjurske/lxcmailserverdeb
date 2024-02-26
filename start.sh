@@ -82,6 +82,7 @@ install_mailserver() {
         printf "Great\n"
         printf "Script will now generate corresponding passwords...\n\n"
         bash scripts/pwgen.sh
+        bash scripts/mailserver.sh
     else
         printf "Please input the settings again.\n"
         install_mailserver
