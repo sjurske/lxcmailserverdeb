@@ -88,8 +88,8 @@ set_variables() {
 
 list_variables() {
     printf "\n----------Overview of settings----------\n\n"
-    printf "${BYellow}Hostname:${Yellow} $DOMAIN$\n"
-    printf "${BYellow}Domain:${Yellow} $DOMAIN$\n"
+    printf "${BYellow}Hostname:${Yellow} $DOMAIN\n"
+    printf "${BYellow}Domain:${Yellow} $DOMAIN\n"
     printf "${BYellow}E-Mail Address:${Yellow} $EMAIL\n"
     printf "${BYellow}E-Mail Password:${Yellow} $E_PASS\n"
     printf "${BYellow}Database Name:${Yellow} $DATABASE\n"
