@@ -88,13 +88,13 @@ set_variables() {
 
 list_variables() {
     printf "\n----------Overview of settings----------\n\n"
-    printf "${Yellow}Hostname: $DOMAIN\n"
-    printf "Domain: $DOMAIN\n"
-    printf "E-Mail Address: $EMAIL\n"
-    printf "E-Mail Password: $E_PASS\n"
-    printf "Database Name: $DATABASE\n"
-    printf "Database User Name: $DB_USER\n${Color_Off}"
-    printf "DB_PASS: $DB_PASS\n"
+    printf "${BYellow}Hostname:${Yellow} $DOMAIN$\n"
+    printf "${BYellow}Domain:${Yellow} $DOMAIN$\n"
+    printf "${BYellow}E-Mail Address:${Yellow} $EMAIL\n"
+    printf "${BYellow}E-Mail Password:${Yellow} $E_PASS\n"
+    printf "${BYellow}Database Name:${Yellow} $DATABASE\n"
+    printf "${BYellow}Database User Name:${Yellow} $DB_USER\n"
+    printf "${BYellow}DB_PASS:${Yellow} $DB_PASS\n"
     read -p "\nAre these settings correct? (Y/N): " settings_correct
     while ! validate_yes_no "$settings_correct"; do
         read -p "Invalid input. Please enter Y or N: " settings_correct
