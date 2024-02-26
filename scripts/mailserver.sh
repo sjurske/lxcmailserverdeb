@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 source misc/color.func
-clear
 printf "\n${BGreen}Installing & Updating required software${Color_Off}\n"
 bash misc/main_deps.sh
 bash misc/update_sources.sh
@@ -95,3 +94,4 @@ EOF
 )
 echo "$mysql_virtual_mailbox_domains_cf" | tee > /etc/postfix/mysql-virtual-mailbox-domains.cf
 printf "\n${BGreen}-----POSTFIX MYSQL V MAILBOX CONFIGURED-----${Color_Off}\n"
+
