@@ -8,16 +8,6 @@ systemctl start mariadb && systemctl enable mariadb
 systemctl start postfix && systemctl enable postfix
 systemctl start dovecot && systemctl enable dovecot
 
-# TESTCHECK
-printf "FINAL CHECK VARIABLES\n\n"
-printf "$DATABASE\n"
-printf "$DOMAIN\n"
-printf "$DB_USER\n"
-printf "$DB_PASS\n"
-printf "$E_PASS\n"
-printf "$EMAIL\n"
-read -p "Press Enter to continue...\n\n"
-
 printf "\n\n${BGreen}Configuring server files...${Color_Off}\n\n"
 
 bootstrapdb () {
@@ -34,6 +24,8 @@ INSERT INTO $DATABASE.virtual_users(id, domain_id, password, email)VALUES('1', '
 EOF
 }
 bootstrapdb
+
+printf "\n${BGreen}-----------MYSQL CONFIGURED-----------${Color_Off}\n"
 
 postfix_main_cf=$(cat <<EOF
 smtpd_banner = $DOMAIN ESMTP mail.$DOMAIN (Debian/GNU)
@@ -86,8 +78,9 @@ smtp_tls_security_level = encrypt
 smtp_tls_note_starttls_offer = yes
 EOF
 )
-
 echo "$postfix_main_cf" | sudo tee /etc/postfix/main.cf > /dev/null
+printf "\n${BGreen}--------POSTFIX MAIN CONFIGURED--------${Color_Off}\n"
+
 
 #set IFS to blank so we preserve new lines in multiline strings
 mysql_virtual_mailbox_domains_cf=$(cat <<EOF
@@ -99,3 +92,4 @@ query = SELECT 1 FROM virtual_domains WHERE name='%s'"
 EOF
 )
 echo "$mysql_virtual_mailbox_domains_cf" | tee > /etc/postfix/mysql-virtual-mailbox-domains.cf
+printf "\n${BGreen}-----POSTFIX MYSQL V MAILBOX CONFIGURED-----${Color_Off}\n"
