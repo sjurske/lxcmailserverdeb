@@ -94,8 +94,8 @@ list_variables() {
     printf "${BYellow}E-Mail Password:${Yellow} $E_PASS\n"
     printf "${BYellow}Database Name:${Yellow} $DATABASE\n"
     printf "${BYellow}Database User Name:${Yellow} $DB_USER\n"
-    printf "${BYellow}DB_PASS:${Yellow} $DB_PASS\n"
-    read -p "\nAre these settings correct? (Y/N): " settings_correct
+    printf "${BYellow}DB_PASS:${Yellow} $DB_PASS\n\n"
+    read -p "Are these settings correct? (Y/N): " settings_correct
     while ! validate_yes_no "$settings_correct"; do
         read -p "Invalid input. Please enter Y or N: " settings_correct
     done
