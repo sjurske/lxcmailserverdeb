@@ -16,9 +16,10 @@ printf "$DB_USER\n"
 printf "$DB_PASS\n"
 printf "$E_PASS\n"
 printf "$EMAIL\n"
-read -p "Press Enter to continue..."
+read -p "Press Enter to continue...\n\n"
 
 printf "\n\n${BGreen}Configuring server files...${Color_Off}\n\n"
+
 bootstrapdb () {
   mysql -u root <<EOF
 CREATE DATABASE IF NOT EXISTS $DATABASE;
