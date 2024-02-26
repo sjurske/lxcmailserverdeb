@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source <(curl -s https://raw.githubusercontent.com/sjurske/lcxmailserverdeb/main/misc/build.func)
+source misc/build.func
 source misc/color.func
 function header_info {
 clear
