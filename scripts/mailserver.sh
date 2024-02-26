@@ -4,48 +4,45 @@ bash misc/main_deps.sh
 bash misc/update_sources.sh
 bash misc/mailserver_deps.sh
 printf "$\n\n${BGreen}Start and enable required services...${Color_Off}\n\n"
-systemctl start mariadb
-systemctl start postfix
-systemctl start dovecot
-systemctl enable mariabd
-systemctl enable postfix
-systemctl enable dovecot
+systemctl start mariadb && systemctl enable mariadb
+systemctl start postfix && systemctl enable postfix
+systemctl start dovecot && systemctl enable dovecot
 printf "$\n\n${BGreen}Configuring server files...${Color_Off}\n\n"
-bootstrapdb(){
-    cat <<EOF | mysql -u root
+bootstrapdb() {
+    mysql -u root <<EOF
         CREATE DATABASE IF NOT EXISTS $DATABASE;
         GRANT SELECT ON $DATABASE.* TO '$DB_USER'@'127.0.0.1' IDENTIFIED BY '$DB_PASS';
         FLUSH PRIVILEGES;
         USE mailserver;
         CREATE TABLE IF NOT EXISTS virtual_domains (
-        id  INT NOT NULL AUTO_INCREMENT,
-        name VARCHAR(50) NOT NULL,
-        PRIMARY KEY (id)
+            id INT NOT NULL AUTO_INCREMENT,
+            name VARCHAR(50) NOT NULL,
+            PRIMARY KEY (id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         CREATE TABLE IF NOT EXISTS virtual_users (
-        id INT NOT NULL AUTO_INCREMENT,
-        domain_id INT NOT NULL,
-        password VARCHAR(106) NOT NULL,
-        email VARCHAR(120) NOT NULL,
-        PRIMARY KEY (id),
-        UNIQUE KEY email (email),
-        FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
+            id INT NOT NULL AUTO_INCREMENT,
+            domain_id INT NOT NULL,
+            password VARCHAR(106) NOT NULL,
+            email VARCHAR(120) NOT NULL,
+            PRIMARY KEY (id),
+            UNIQUE KEY email (email),
+            FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         CREATE TABLE IF NOT EXISTS virtual_aliases (
-        id INT NOT NULL AUTO_INCREMENT,
-        domain_id INT NOT NULL,
-        source varchar(100) NOT NULL,
-        destination varchar(100) NOT NULL,
-        PRIMARY KEY (id),
-        FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
+            id INT NOT NULL AUTO_INCREMENT,
+            domain_id INT NOT NULL,
+            source varchar(100) NOT NULL,
+            destination varchar(100) NOT NULL,
+            PRIMARY KEY (id),
+            FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         INSERT INTO mailserver.virtual_domains
-        (id ,name)
+        (id, name)
         VALUES
         ('1', '$DOMAIN'),
         ('2', 'mail.$DOMAIN');
         INSERT INTO mailserver.virtual_users
-        (id, domain_id, password , email)
+        (id, domain_id, password, email)
         VALUES
         ('1', '1', ENCRYPT('$E_PASS', CONCAT('\$6\$', SUBSTRING(SHA(RAND()), -16))), '$EMAIL');
 EOF
