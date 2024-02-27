@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 source misc/color.func
-
+clear
 ##ENTER TO CONTINUE
 printf "${Yellow}   ----------------------------------------   ${Color_Off}\n"
 printf "${Yellow}|       BEFORE YOU CONTINUE PLEASE           |${Color_Off}\n"
