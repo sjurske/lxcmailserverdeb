@@ -130,7 +130,6 @@ list_variables() {
         printf "${Green} - PRESS ENTER TO CONTINUE: ${Color_Off}\n\n"
         read -p ""
         export DOMAIN EMAIL DATABASE DB_USER DB_PASS E_PASS PUB_IP
-        printf "\n${BGreen}Running Mailserver installation script${Color_Off}\n"
         bash scripts/mailserver.sh
     else
         printf "Please input the settings again.\n"

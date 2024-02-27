@@ -1,25 +1,26 @@
 #!/usr/bin/env bash
 source misc/color.func
 clear
-printf "\n${BGreen}Installing & Updating required software${Color_Off}\n"
+printf "\n${BGreen}-----Running Mailserver installation script-----${Color_Off}\n"
+printf "${BGreen}---------Installing & Updating software---------${Color_Off}\n"
 bash misc/main_deps.sh
 bash misc/update_sources.sh
 bash misc/mailserver_deps.sh
-printf "${BGreen}Start and enable required services...${Color_Off}\n"
+printf "${BGreen}------Start and enable required services...-----${Color_Off}\n"
 systemctl start mariadb && systemctl enable mariadb
 systemctl start postfix && systemctl enable postfix
 systemctl start dovecot && systemctl enable dovecot
-printf "${BGreen}Creating virtual mail user...${Color_Off}\n"
+printf "${BGreen}----------Creating virtual mail user...---------${Color_Off}\n"
 mkdir /home/vmail
 useradd -u 5000 vmail -d /home/vmail/
 groupadd -g 5000 vmail
 usermod -a -G vmail vmail
 chown -R vmail:vmail /home/vmail/
-printf "${BGreen}Creating Dovecot SSL Cert...${Color_Off}\n"
+printf "${BGreen}----------Creating Dovecot SSL Cert...----------${Color_Off}\n"
 openssl req -new -x509 -nodes -newkey rsa:4096 -keyout /etc/ssl/private/vmail.key -out /etc/ssl/private/vmail.crt -days 365
 chmod 400 /etc/ssl/private/vmail.key
 chmod 444 /etc/ssl/private/vmail.crt
-printf "${BGreen}Configuring server files...${Color_Off}\n"
+printf "${BGreen}-----------Configuring server files...----------${Color_Off}\n"
 bootstrapmysql () {
   mysql -u root <<EOF
 CREATE DATABASE IF NOT EXISTS $DATABASE;
@@ -34,7 +35,7 @@ INSERT INTO $DATABASE.virtual_users(id, domain_id, password, email)VALUES('1', '
 EOF
 }
 bootstrapmysql
-printf "${BGreen}-----------MYSQL CONFIGURED-----------${Color_Off}\n"
+printf "${BGreen}----------------MYSQL CONFIGURED----------------${Color_Off}\n"
 
 postfix_main_cf=$(cat <<EOF
 smtpd_banner = $DOMAIN ESMTP mail.$DOMAIN (Debian/GNU)
@@ -150,7 +151,7 @@ query = SELECT 1 FROM virtual_domains WHERE name='%s'"
 EOF
 )
 echo "$mysql_virtual_mailbox_domains_cf" | tee > /etc/postfix/mysql-virtual-mailbox-domains.cf
-printf "${BGreen}----------POSTFIX CONFIGURED----------${Color_Off}\n"
+printf "${BGreen}---------------POSTFIX CONFIGURED---------------${Color_Off}\n"
 
 #DOVECOT MAIN CONF
 dovecot_conf=$(cat <<EOF
@@ -312,7 +313,7 @@ userdb {
 EOF
 )
 echo "$dovecot_auth_sql" | sudo tee /etc/dovecot/conf.d/auth-sql.conf.ext > /dev/null
-printf "${BGreen}----------DOVECOT CONFIGURED----------${Color_Off}\n"
+printf "${BGreen}---------------DOVECOT CONFIGURED---------------${Color_Off}\n"
 
 # CREATE AND CONFIGURE VIRTUAL MAILBOX FILES
 echo 'user = '$DB_USER'' > /etc/postfix/virtual-mailbox-domains.conf
@@ -336,13 +337,9 @@ chmod 640 /etc/postfix/virtual-mailbox-domains.conf
 chmod 640 /etc/postfix/virtual-mailbox-users.conf
 chmod 640 /etc/postfix/virtual-alias-maps.conf
 
-
-
-
-
 ### WHEN COMPLETE
-printf "${BGreen} ---------------------------------------- ${Color_Off}\n"
-printf "${BGreen}|            SCRIPT COMPLETED            |${Color_Off}\n"
-printf "${BGreen}|            RESTART MACHINE             |${Color_Off}\n"
-printf "${BGreen}|                 BYEBYE                 |${Color_Off}\n"
-printf "${BGreen} ---------------------------------------- ${Color_Off}\n"
+printf "${BGreen} ---------------------------------------------- ${Color_Off}\n"
+printf "${BGreen}|               SCRIPT COMPLETED               |${Color_Off}\n"
+printf "${BGreen}|               RESTART MACHINE                |${Color_Off}\n"
+printf "${BGreen}|                    BYEBYE                    |${Color_Off}\n"
+printf "${BGreen} ---------------------------------------------- ${Color_Off}\n"
