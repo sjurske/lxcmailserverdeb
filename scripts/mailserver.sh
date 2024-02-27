@@ -334,3 +334,15 @@ echo "query = SELECT Destination FROM virtual_aliases WHERE Source='%s'" >> /etc
 chmod 640 /etc/postfix/virtual-mailbox-domains.conf
 chmod 640 /etc/postfix/virtual-mailbox-users.conf
 chmod 640 /etc/postfix/virtual-alias-maps.conf
+
+
+
+
+
+### WHEN COMPLETE
+printf "${BGreen}------------------------------------------\n"
+printf "|            SCRIPT COMPLETED            |\n"
+printf "|           RESTART MACHINE AND          |"
+printf "|                                        |"
+printf "|                 BYEBYE                 |"
+printf "------------------------------------------${Color_Off}\n"
