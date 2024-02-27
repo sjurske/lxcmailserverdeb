@@ -4,29 +4,36 @@ printf "\n${BGreen}Installing & Updating required software${Color_Off}\n"
 bash misc/main_deps.sh
 bash misc/update_sources.sh
 bash misc/mailserver_deps.sh
-printf "\n\n${BGreen}Start and enable required services...${Color_Off}\n\n"
+printf "${BGreen}Start and enable required services...${Color_Off}\n"
 systemctl start mariadb && systemctl enable mariadb
 systemctl start postfix && systemctl enable postfix
 systemctl start dovecot && systemctl enable dovecot
-
-printf "\n\n${BGreen}Configuring server files...${Color_Off}\n\n"
-
+printf "${BGreen}Creating virtual mail user...${Color_Off}\n"
+mkdir /home/vmail
+useradd -u 5000 vmail -d /home/vmail/
+groupadd -g 5000 vmail
+usermod -a -G vmail vmail
+chown -R vmail:vmail /home/vmail/
+printf "${BGreen}Creating Dovecot SSL Cert...${Color_Off}\n"
+openssl req -new -x509 -nodes -newkey rsa:4096 -keyout /etc/ssl/private/vmail.key -out /etc/ssl/private/vmail.crt -days 365
+chmod 400 /etc/ssl/private/vmail.key
+chmod 444 /etc/ssl/private/vmail.crt
+printf "${BGreen}Configuring server files...${Color_Off}\n"
 bootstrapmysql () {
   mysql -u root <<EOF
 CREATE DATABASE IF NOT EXISTS $DATABASE;
 GRANT SELECT ON $DATABASE.* TO '$DB_USER'@'127.0.0.1' IDENTIFIED BY '$DB_PASS';
 FLUSH PRIVILEGES;
 USE $DATABASE;
-CREATE TABLE IF NOT EXISTS virtual_domains (id INT NOT NULL AUTO_INCREMENT,name VARCHAR(50) NOT NULL,PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE IF NOT EXISTS virtual_users (id INT NOT NULL AUTO_INCREMENT,domain_id INT NOT NULL,password VARCHAR(106) NOT NULL,email VARCHAR(120) NOT NULL,PRIMARY KEY (id),UNIQUE KEY email (email),FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE IF NOT EXISTS virtual_aliases (id INT NOT NULL AUTO_INCREMENT,domain_id INT NOT NULL,source varchar(100) NOT NULL,destination varchar(100) NOT NULL,PRIMARY KEY (id),FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS virtual_domains (DomainId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,DomainName VARCHAR(50) NOT NULL);
+CREATE TABLE IF NOT EXISTS virtual_mailboxes (MailId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,DomainId INT NOT NULL,password VARCHAR(255) NOT NULL,Email VARCHAR(100) UNIQUE KEY NOT NULL,FOREIGN KEY (DomainId) REFERENCES virtual_domains(DomainId) ON DELETE CASCADE);
+CREATE TABLE IF NOT EXISTS virtual_aliases (AliasId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,DomainId INT NOT NULL,Source VARCHAR(100) NOT NULL,Destination VARCHAR(100) NOT NULL,FOREIGN KEY (DomainId) REFERENCES virtual_domains(DomainId) ON DELETE CASCADE);
 INSERT INTO $DATABASE.virtual_domains(id, name) VALUES('1', '$DOMAIN'),('2', 'mail.$DOMAIN');
 INSERT INTO $DATABASE.virtual_users(id, domain_id, password, email)VALUES('1', '1', ENCRYPT('$E_PASS', CONCAT('\$6\$', SUBSTRING(SHA(RAND()), -16))), '$EMAIL');
 EOF
 }
 bootstrapmysql
-
-printf "\n${BGreen}-----------MYSQL CONFIGURED-----------${Color_Off}\n"
+printf "${BGreen}-----------MYSQL CONFIGURED-----------${Color_Off}\n"
 
 postfix_main_cf=$(cat <<EOF
 smtpd_banner = $DOMAIN ESMTP mail.$DOMAIN (Debian/GNU)
@@ -55,13 +62,12 @@ alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 myorigin = $DOMAIN
 mydestination = $DOMAIN, localhost.$DOMAIN, localhost
-mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 89.146.39.82/31 $PUB_IP
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 $PUB_IP/31
 mailbox_size_limit = 0
 recipient_delimiter = +
 inet_interfaces = all
-inet_protocols = all
+inet_protocols = ipv4
 smtp_bind_address = $PUB_IP
-smtp_bind_address6 = 2a01:7c8:d006:283:5054:ff:fe30:2a17
 smtpd_recipient_restrictions = permit_mynetworks
 home_mailbox = Maildir/
 virtual_transport = dovecot
@@ -80,6 +86,60 @@ smtp_tls_note_starttls_offer = yes
 EOF
 )
 echo "$postfix_main_cf" | sudo tee /etc/postfix/main.cf > /dev/null
+
+postfix_master_cf=$(cat <<EOF'
+smtp      inet  n       -       n       -       -       smtpd
+submission inet n       -       n       -       -       smtpd
+  -o syslog_name=postfix/submission
+  -o smtpd_tls_security_level=encrypt
+  -o smtpd_sasl_auth_enable=yes
+  -o smtpd_tls_auth_only=yes
+  -o smtpd_reject_unlisted_recipient=no
+  -o smtpd_recipient_restrictions=permit_sasl_authenticated,reject
+  -o milter_macro_daemon_name=ORIGINATING
+pickup    unix  n       -       n       60      1       pickup
+cleanup   unix  n       -       n       -       0       cleanup
+qmgr      unix  n       -       n       300     1       qmgr
+
+tlsmgr    unix  -       -       n       1000?   1       tlsmgr
+rewrite   unix  -       -       n       -       -       trivial-rewrite
+bounce    unix  -       -       n       -       0       bounce
+defer     unix  -       -       n       -       0       bounce
+trace     unix  -       -       n       -       0       bounce
+verify    unix  -       -       n       -       1       verify
+flush     unix  n       -       n       1000?   0       flush
+proxymap  unix  -       -       n       -       -       proxymap
+proxywrite unix -       -       n       -       1       proxymap
+smtp      unix  -       -       n       -       -       smtp
+relay     unix  -       -       n       -       -       smtp
+        -o syslog_name=postfix/$service_name
+showq     unix  n       -       n       -       -       showq
+error     unix  -       -       n       -       -       error
+retry     unix  -       -       n       -       -       error
+discard   unix  -       -       n       -       -       discard
+local     unix  -       n       n       -       -       local
+virtual   unix  -       n       n       -       -       virtual
+lmtp      unix  -       -       n       -       -       lmtp
+anvil     unix  -       -       n       -       1       anvil
+scache    unix  -       -       n       -       1       scache
+maildrop  unix  -       n       n       -       -       pipe
+  flags=DRXhu user=vmail argv=/usr/bin/maildrop -d ${recipient}
+uucp      unix  -       n       n       -       -       pipe
+  flags=Fqhu user=uucp argv=uux -r -n -z -a$sender - $nexthop!rmail ($recipient)
+ifmail    unix  -       n       n       -       -       pipe
+  flags=F user=ftn argv=/usr/lib/ifmail/ifmail -r $nexthop ($recipient)
+bsmtp     unix  -       n       n       -       -       pipe
+  flags=Fq. user=bsmtp argv=/usr/lib/bsmtp/bsmtp -t$nexthop -f$sender $recipient
+scalemail-backend unix -       n       n       -       2       pipe
+  flags=R user=scalemail argv=/usr/lib/scalemail/bin/scalemail-store ${nexthop} ${user} ${extension}
+mailman   unix  -       n       n       -       -       pipe
+  flags=FRX user=list argv=/usr/lib/mailman/bin/postfix-to-mailman.py ${nexthop} ${user}
+dovecot   unix  -       n       n       -       -       pipe
+  flags=DRhu user=vmail:vmail argv=/usr/lib/dovecot/deliver -f ${sender} -d ${recipient}'
+EOF
+)
+
+echo "$postfix_master_cf" | sudo tee /etc/postfix/master.cf > /dev/null
 
 mysql_virtual_mailbox_domains_cf=$(cat <<EOF
 user = $DB_USER
@@ -253,3 +313,25 @@ EOF
 )
 echo "$dovecot_auth_sql" | sudo tee /etc/dovecot/conf.d/auth-sql.conf.ext > /dev/null
 printf "${BGreen}----------DOVECOT CONFIGURED---------${Color_Off}\n"
+
+# CREATE AND CONFIGURE VIRTUAL MAILBOX FILES
+echo 'user = '$DB_USER'' > /etc/postfix/virtual-mailbox-domains.conf
+echo 'password = 'DB_PASS'' >> /etc/postfix/virtual-mailbox-domains.conf
+echo 'hosts = 127.0.0.1' >> /etc/postfix/virtual-mailbox-domains.conf
+echo 'dbname = '$DATABASE'' >> /etc/postfix/virtual-mailbox-domains.conf
+echo "query = SELECT 1 FROM virtual_domains WHERE DomainName ='%s'" >> /etc/postfix/virtual-mailbox-domains.conf
+echo 'user = '$DB_USER'' > /etc/postfix/virtual-mailbox-users.conf
+echo 'password = 'DB_PASS'' >> /etc/postfix/virtual-mailbox-users.conf
+echo 'hosts = 127.0.0.1' >> /etc/postfix/virtual-mailbox-users.conf
+echo 'dbname = '$DATABASE'' >> /etc/postfix/virtual-mailbox-users.conf
+echo "query = SELECT 1 FROM virtual_mailboxes WHERE Email='%s'" >> /etc/postfix/virtual-mailbox-users.conf
+echo 'user = '$DB_USER'' > /etc/postfix/virtual-alias-maps.conf
+echo 'password = '$DB_PASS'' >> /etc/postfix/virtual-alias-maps.conf
+echo 'hosts = 127.0.0.1' >> /etc/postfix/virtual-alias-maps.conf
+echo 'dbname = '$DATABASE'' >> /etc/postfix/virtual-alias-maps.conf
+echo "query = SELECT Destination FROM virtual_aliases WHERE Source='%s'" >> /etc/postfix/virtual-alias-maps.conf
+
+# CONFIGURE PERMISSIONS
+chmod 640 /etc/postfix/virtual-mailbox-domains.conf
+chmod 640 /etc/postfix/virtual-mailbox-users.conf
+chmod 640 /etc/postfix/virtual-alias-maps.conf
