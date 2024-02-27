@@ -315,12 +315,12 @@ printf "${BGreen}----------DOVECOT CONFIGURED---------${Color_Off}\n"
 
 # CREATE AND CONFIGURE VIRTUAL MAILBOX FILES
 echo 'user = '$DB_USER'' > /etc/postfix/virtual-mailbox-domains.conf
-echo 'password = 'DB_PASS'' >> /etc/postfix/virtual-mailbox-domains.conf
+echo 'password = '$DB_PASS'' >> /etc/postfix/virtual-mailbox-domains.conf
 echo 'hosts = 127.0.0.1' >> /etc/postfix/virtual-mailbox-domains.conf
 echo 'dbname = '$DATABASE'' >> /etc/postfix/virtual-mailbox-domains.conf
 echo "query = SELECT 1 FROM virtual_domains WHERE DomainName ='%s'" >> /etc/postfix/virtual-mailbox-domains.conf
 echo 'user = '$DB_USER'' > /etc/postfix/virtual-mailbox-users.conf
-echo 'password = 'DB_PASS'' >> /etc/postfix/virtual-mailbox-users.conf
+echo 'password = '$DB_PASS'' >> /etc/postfix/virtual-mailbox-users.conf
 echo 'hosts = 127.0.0.1' >> /etc/postfix/virtual-mailbox-users.conf
 echo 'dbname = '$DATABASE'' >> /etc/postfix/virtual-mailbox-users.conf
 echo "query = SELECT 1 FROM virtual_mailboxes WHERE Email='%s'" >> /etc/postfix/virtual-mailbox-users.conf
