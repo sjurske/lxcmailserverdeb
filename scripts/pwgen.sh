@@ -5,7 +5,7 @@ generate_password() {
     local password=$(openssl rand -base64 24)
     echo "$password"
 }
-printf "${BGreen}-------------GENERATING PASSWORDS---------------${Color_Off}\n\n"
+printf "\n${BGreen}-------------GENERATING PASSWORDS---------------${Color_Off}\n\n"
 E_PASS=$(generate_password)
 printf "E-Mail Password: ${UWhite}${E_PASS}${Color_Off}\n"
 printf "${E_PASS}" > e_pw.md

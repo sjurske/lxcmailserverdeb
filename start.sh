@@ -96,7 +96,6 @@ set_variables() {
 }
 
 list_variables() {
-    clear
     printf "\n----------Overview of settings----------\n\n"
     printf "${BYellow}Hostname:${Yellow} $DOMAIN\n"
     printf "${BYellow}Domain:${Yellow} $DOMAIN\n"
