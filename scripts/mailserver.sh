@@ -1,5 +1,27 @@
 #!/usr/bin/env bash
 source misc/color.func
+
+##ENTER TO CONTINUE
+printf "${Yellow}   ----------------------------------------   ${Color_Off}\n"
+printf "${Yellow}|       BEFORE YOU CONTINUE PLEASE           |${Color_Off}\n"
+printf "${Yellow}|   MAKE SURE YOU HAVE A VALID DOMAIN        |${Color_Off}\n"
+printf "${Yellow}|       CONFIGURE YOUR DNS PROPERLY          |${Color_Off}\n"
+printf "${Yellow}|      AND PORT FORWARD THESE PORTS:         |${Color_Off}\n"
+printf "${BYellow}|                    25                      |${Color_Off}\n"
+printf "${BYellow}|                    80                      |${Color_Off}\n"
+printf "${BYellow}|                    110                     |${Color_Off}\n"
+printf "${BYellow}|                    143                     |${Color_Off}\n"
+printf "${BYellow}|                    443                     |${Color_Off}\n"
+printf "${BYellow}|                    465                     |${Color_Off}\n"
+printf "${BYellow}|                    587                     |${Color_Off}\n"
+printf "${BYellow}|                    993                     |${Color_Off}\n"
+printf "${BYellow}|                    995                     |${Color_Off}\n"
+printf "${BYellow}|                OPTIONAL: 22                |${Color_Off}\n"
+printf "${BYellow}|                                            |${Color_Off}\n"
+printf "${Yellow}   ----------------------------------------   ${Color_Off}\n\n"
+printf "${Yellow} - PRESS ENTER TO CONTINUE: ${Color_Off}\n\n"
+read -p ""
+
 printf "\n${BGreen}Installing & Updating required software${Color_Off}\n"
 bash misc/main_deps.sh
 bash misc/update_sources.sh
@@ -311,7 +333,7 @@ userdb {
 EOF
 )
 echo "$dovecot_auth_sql" | sudo tee /etc/dovecot/conf.d/auth-sql.conf.ext > /dev/null
-printf "${BGreen}----------DOVECOT CONFIGURED---------${Color_Off}\n"
+printf "${BGreen}----------DOVECOT CONFIGURED----------${Color_Off}\n"
 
 # CREATE AND CONFIGURE VIRTUAL MAILBOX FILES
 echo 'user = '$DB_USER'' > /etc/postfix/virtual-mailbox-domains.conf
