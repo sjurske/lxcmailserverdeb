@@ -15,5 +15,5 @@ printf "${DB_PASS}" > db_pw.md
 printf "${UWhite}--------------PASSWORDS GENERETED---------------${Color_Off}\n\n"
 printf "${UWhite}Stored in 'e_pw.md' 'db_pw.md'${Color_Off}\n"
 printf "${BYellow}DELETE OR MOVE THEM TO A SECURE PATH\n${Color_Off}\n"
-printf "${Green} - PRESS ENTER TO CONTINUE: ${Color_Off}\n"
+printf "${Green}PRESS ENTER TO CONTINUE: ${Color_Off}\n"
 read -p ""
