@@ -72,6 +72,7 @@ install_nginx() {
 }
 
 set_variables() {
+    clear
     read -p "Enter Domain Name: " DOMAIN
     echo "$DOMAIN" | tee /etc/hostname
     hostnamectl set-hostname "$DOMAIN"
@@ -95,6 +96,7 @@ set_variables() {
 }
 
 list_variables() {
+    clear
     printf "\n----------Overview of settings----------\n\n"
     printf "${BYellow}Hostname:${Yellow} $DOMAIN\n"
     printf "${BYellow}Domain:${Yellow} $DOMAIN\n"
@@ -108,10 +110,28 @@ list_variables() {
         read -p "Invalid input. Please enter Y or N: " settings_correct
     done
     if [[ "$settings_correct" =~ ^[Yy]$ ]]; then
-        printf "Great\n"
+        ##ENTER TO CONTINUE
+        printf "${Yellow}   ----------------------------------------   ${Color_Off}\n"
+        printf "${Yellow}|       BEFORE YOU CONTINUE PLEASE           |${Color_Off}\n"
+        printf "${Yellow}|   MAKE SURE YOU HAVE A VALID DOMAIN        |${Color_Off}\n"
+        printf "${Yellow}|       CONFIGURE YOUR DNS PROPERLY          |${Color_Off}\n"
+        printf "${Yellow}|      AND PORT FORWARD THESE PORTS:         |${Color_Off}\n"
+        printf "${Yellow}|                    25                      |${Color_Off}\n"
+        printf "${Yellow}|                    80                      |${Color_Off}\n"
+        printf "${Yellow}|                    110                     |${Color_Off}\n"
+        printf "${Yellow}|                    143                     |${Color_Off}\n"
+        printf "${Yellow}|                    443                     |${Color_Off}\n"
+        printf "${Yellow}|                    465                     |${Color_Off}\n"
+        printf "${Yellow}|                    587                     |${Color_Off}\n"
+        printf "${Yellow}|                    993                     |${Color_Off}\n"
+        printf "${Yellow}|                    995                     |${Color_Off}\n"
+        printf "${Yellow}|                OPTIONAL: 22                |${Color_Off}\n"
+        printf "${Yellow}   ----------------------------------------   ${Color_Off}\n\n"
+        printf "${Green} - PRESS ENTER TO CONTINUE: ${Color_Off}\n\n"
+        read -p ""
         export DOMAIN EMAIL DATABASE DB_USER DB_PASS E_PASS PUB_IP
         printf "\n${BGreen}Running Mailserver installation script${Color_Off}\n"
-        bash scripts/mailserver.sh   
+        bash scripts/mailserver.sh
     else
         printf "Please input the settings again.\n"
         set_variables
