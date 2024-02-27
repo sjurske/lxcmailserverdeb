@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source misc/color.func
+clear
 printf "\n${BGreen}Installing & Updating required software${Color_Off}\n"
 bash misc/main_deps.sh
 bash misc/update_sources.sh
