@@ -87,7 +87,7 @@ EOF
 )
 echo "$postfix_main_cf" | sudo tee /etc/postfix/main.cf > /dev/null
 
-postfix_master_cf=$(cat <<EOF'
+postfix_master_cf=$(cat << "EOF"
 smtp      inet  n       -       n       -       -       smtpd
 submission inet n       -       n       -       -       smtpd
   -o syslog_name=postfix/submission
@@ -135,10 +135,9 @@ scalemail-backend unix -       n       n       -       2       pipe
 mailman   unix  -       n       n       -       -       pipe
   flags=FRX user=list argv=/usr/lib/mailman/bin/postfix-to-mailman.py ${nexthop} ${user}
 dovecot   unix  -       n       n       -       -       pipe
-  flags=DRhu user=vmail:vmail argv=/usr/lib/dovecot/deliver -f ${sender} -d ${recipient}'
+  flags=DRhu user=vmail:vmail argv=/usr/lib/dovecot/deliver -f ${sender} -d ${recipient}
 EOF
 )
-
 echo "$postfix_master_cf" | sudo tee /etc/postfix/master.cf > /dev/null
 
 mysql_virtual_mailbox_domains_cf=$(cat <<EOF
