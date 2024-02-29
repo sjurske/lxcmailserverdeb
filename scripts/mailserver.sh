@@ -87,7 +87,7 @@ smtp_tls_security_level = encrypt
 smtp_tls_note_starttls_offer = yes
 EOF
 )
-echo "$postfix_main_cf" | sudo tee /etc/postfix/main.cf > /dev/null
+echo "$postfix_main_cf" | tee /etc/postfix/main.cf > /dev/null
 
 postfix_master_cf=$(cat << "EOF"
 smtp      inet  n       -       n       -       -       smtpd
@@ -140,7 +140,7 @@ dovecot   unix  -       n       n       -       -       pipe
   flags=DRhu user=vmail:vmail argv=/usr/lib/dovecot/deliver -f ${sender} -d ${recipient}
 EOF
 )
-echo "$postfix_master_cf" | sudo tee /etc/postfix/master.cf > /dev/null
+echo "$postfix_master_cf" | tee /etc/postfix/master.cf > /dev/null
 
 mysql_virtual_mailbox_domains_cf=$(cat <<EOF
 user = $DB_USER
@@ -163,7 +163,7 @@ dict {
 !include_try local.conf
 EOF
 )
-echo "$dovecot_conf" | sudo tee /etc/dovecot/dovecot.conf > /dev/null
+echo "$dovecot_conf" | tee /etc/dovecot/dovecot.conf > /dev/null
 
 dovecot_sql=$(cat <<EOF
 driver = mysql
@@ -172,7 +172,7 @@ default_pass_scheme = SHA512-CRYPT
 password_query = SELECT Email as User, password FROM virtual_mailboxes WHERE Email='%u';
 EOF
 )
-echo "$dovecot_sql" | sudo tee /etc/dovecot/dovecot-sql.conf.ext > /dev/null
+echo "$dovecot_sql" | tee /etc/dovecot/dovecot-sql.conf.ext > /dev/null
 
 # DOVECOT CONF.D CONFIG FILES
 dovecot_10_auth=$(cat <<EOF
@@ -181,7 +181,7 @@ auth_mechanisms = plain login
 !include auth-sql.conf.ext
 EOF
 )
-echo "$dovecot_10_auth" | sudo tee /etc/dovecot/conf.d/10-auth.conf > /dev/null
+echo "$dovecot_10_auth" | tee /etc/dovecot/conf.d/10-auth.conf > /dev/null
 
 dovecot_10_mail=$(cat <<EOF
 mail_location = maildir:/home/vmail/%d/%n/Maildir
@@ -195,7 +195,7 @@ protocol !indexer-worker {
 mbox_write_locks = fcntl
 EOF
 )
-echo "$dovecot_10_mail" | sudo tee /etc/dovecot/conf.d/10-mail.conf > /dev/null
+echo "$dovecot_10_mail" | tee /etc/dovecot/conf.d/10-mail.conf > /dev/null
 
 dovecot_10_master=$(cat <<EOF
 service imap-login {
@@ -244,7 +244,7 @@ service dict {
 }
 EOF
 )
-echo "$dovecot_10_master" | sudo tee /etc/dovecot/conf.d/10-master.conf > /dev/null
+echo "$dovecot_10_master" | tee /etc/dovecot/conf.d/10-master.conf > /dev/null
 
 dovecot_10_ssl=$(cat <<EOF
 ssl = yes
@@ -256,28 +256,28 @@ ssl_cert = </etc/letsencrypt/live/mail.$DOMAIN/fullchain.pem
 ssl_key = </etc/letsencrypt/live/mail.$DOMAIN/privkey.pem
 EOF
 )
-echo "$dovecot_10_ssl" | sudo tee /etc/dovecot/conf.d/10-ssl.conf > /dev/null
+echo "$dovecot_10_ssl" | tee /etc/dovecot/conf.d/10-ssl.conf > /dev/null
 
 dovecot_20_imap=$(cat <<EOF
 protocol imap {
 }
 EOF
 )
-echo "$dovecot_20_imap" | sudo tee /etc/dovecot/conf.d/20-imap.conf > /dev/null
+echo "$dovecot_20_imap" | tee /etc/dovecot/conf.d/20-imap.conf > /dev/null
 
 dovecot_20_pop3=$(cat <<EOF
 protocol pop3 {
 }
 EOF
 )
-echo "$dovecot_20_pop3" | sudo tee /etc/dovecot/conf.d/20-pop3.conf > /dev/null
+echo "$dovecot_20_pop3" | tee /etc/dovecot/conf.d/20-pop3.conf > /dev/null
 
 dovecot_20_lmtp=$(cat <<EOF
 protocol lmtp {
 }
 EOF
 )
-echo "$dovecot_20_lmtp" | sudo tee /etc/dovecot/conf.d/20-lmtp.conf > /dev/null
+echo "$dovecot_20_lmtp" | tee /etc/dovecot/conf.d/20-lmtp.conf > /dev/null
 
 dovecot_auth_master=$(cat <<EOF
 passdb {
@@ -288,7 +288,7 @@ passdb {
 }
 EOF
 )
-echo "$dovecot_auth_master" | sudo tee /etc/dovecot/conf.d/auth-master.conf.ext > /dev/null
+echo "$dovecot_auth_master" | tee /etc/dovecot/conf.d/auth-master.conf.ext > /dev/null
 
 dovecot_auth_master=$(cat <<EOF
 passdb {
@@ -299,7 +299,7 @@ passdb {
 }
 EOF
 )
-echo "$dovecot_auth_master" | sudo tee /etc/dovecot/conf.d/auth-master.conf.ext > /dev/null
+echo "$dovecot_auth_master" | tee /etc/dovecot/conf.d/auth-master.conf.ext > /dev/null
 
 dovecot_auth_sql=$(cat <<EOF
 passdb {
@@ -312,7 +312,7 @@ userdb {
 }
 EOF
 )
-echo "$dovecot_auth_sql" | sudo tee /etc/dovecot/conf.d/auth-sql.conf.ext > /dev/null
+echo "$dovecot_auth_sql" | tee /etc/dovecot/conf.d/auth-sql.conf.ext > /dev/null
 printf "${BGreen}---------------DOVECOT CONFIGURED---------------${Color_Off}\n"
 
 # CREATE AND CONFIGURE VIRTUAL MAILBOX FILES
