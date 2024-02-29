@@ -7,8 +7,8 @@ bash misc/main_deps.sh
 bash misc/update_sources.sh
 bash misc/webserver_deps.sh
 printf "${BGreen}------Start and enable required services...-----${Color_Off}\n"
-systemctl start mariadb && systemctl enable nginx
-systemctl start postfix && systemctl enable php-fpm
+systemctl start nginx && systemctl enable nginx
+systemctl start php-fpm && systemctl enable php-fpm
 printf "${BGreen}----------Creating virtual mail user...---------${Color_Off}\n"
 read -p "Enter the system webuser (e.g. http, www): " SYS_WEB_USER
 read -p "Enable PHP (Y/N): " PHP_ENABLED
