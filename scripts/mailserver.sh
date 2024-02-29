@@ -339,7 +339,7 @@ chmod 640 /etc/postfix/virtual-alias-maps.conf
 
 ### WHEN COMPLETE
 printf "${BGreen} ---------------------------------------------- ${Color_Off}\n"
-printf "${BGreen}|               SCRIPT COMPLETED               |${Color_Off}\n"
+printf "${BGreen}|              SCRIPT COMPLETED                |${Color_Off}\n"
+printf "${BGreen}|              SERVICES ENABLED                |${Color_Off}\n"
 printf "${BGreen}|               RESTART MACHINE                |${Color_Off}\n"
-printf "${BGreen}|                    BYEBYE                    |${Color_Off}\n"
 printf "${BGreen} ---------------------------------------------- ${Color_Off}\n"
