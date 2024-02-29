@@ -347,8 +347,3 @@ else
 printf "${White} ---------------------------------------------- ${Color_Off}\n"
 printf "${White}|              SCRIPT COMPLETED                |${Color_Off}\n"
 printf "${White} ---------------------------------------------- ${Color_Off}\n"
-
-if systemctl is-active --quiet mariadb; then
-  printf
-systemctl status postfix
-systemctl status dovecot
