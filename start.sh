@@ -96,6 +96,7 @@ set_variables() {
 }
 
 list_variables() {
+    clear 
     printf "\n----------Overview of settings----------\n\n"
     printf "${BYellow}Hostname:${Yellow} $DOMAIN\n"
     printf "${BYellow}Domain:${Yellow} $DOMAIN\n"
@@ -129,7 +130,13 @@ list_variables() {
         printf "${Green} - PRESS ENTER TO CONTINUE: ${Color_Off}\n\n"
         read -p ""
         export DOMAIN EMAIL DATABASE DB_USER DB_PASS E_PASS PUB_IP
-        bash scripts/mailserver.sh
+        if [ "$choice" -eq 2 ]; then
+            bash scripts/mailserver.sh
+        elif [ "$choice" -eq 3 ]; then
+            bash scripts/nginx.sh
+        else
+            printf "${Red}Invalid choice. Please enter correct value${Color_Off}\n\n"
+        fi
     else
         printf "Please input the settings again.\n"
         set_variables
