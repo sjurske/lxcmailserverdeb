@@ -337,9 +337,20 @@ chmod 640 /etc/postfix/virtual-mailbox-domains.conf
 chmod 640 /etc/postfix/virtual-mailbox-users.conf
 chmod 640 /etc/postfix/virtual-alias-maps.conf
 
+systemctl restart --quiet mariadb postfix dovecot
+if systemctl is-active --quiet mariadb postfix dovecot; then
+  printf "${BGreen}-------------SERVICES ARE RUNNING----------------"
+else
+  printf "${BRed}--------------------ERROR-----------------------"
+
 ### WHEN COMPLETE
 printf "${BGreen} ---------------------------------------------- ${Color_Off}\n"
 printf "${BGreen}|              SCRIPT COMPLETED                |${Color_Off}\n"
 printf "${BGreen}|              SERVICES ENABLED                |${Color_Off}\n"
 printf "${BGreen}|               RESTART MACHINE                |${Color_Off}\n"
 printf "${BGreen} ---------------------------------------------- ${Color_Off}\n"
+
+if systemctl is-active --quiet mariadb; then
+  printf
+systemctl status postfix
+systemctl status dovecot
