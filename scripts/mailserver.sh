@@ -344,11 +344,9 @@ else
   printf "${BRed}--------------------ERROR-----------------------"
 
 ### WHEN COMPLETE
-printf "${BGreen} ---------------------------------------------- ${Color_Off}\n"
-printf "${BGreen}|              SCRIPT COMPLETED                |${Color_Off}\n"
-printf "${BGreen}|              SERVICES ENABLED                |${Color_Off}\n"
-printf "${BGreen}|               RESTART MACHINE                |${Color_Off}\n"
-printf "${BGreen} ---------------------------------------------- ${Color_Off}\n"
+printf "${White} ---------------------------------------------- ${Color_Off}\n"
+printf "${White}|              SCRIPT COMPLETED                |${Color_Off}\n"
+printf "${White} ---------------------------------------------- ${Color_Off}\n"
 
 if systemctl is-active --quiet mariadb; then
   printf
