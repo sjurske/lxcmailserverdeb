@@ -337,11 +337,21 @@ chmod 640 /etc/postfix/virtual-mailbox-domains.conf
 chmod 640 /etc/postfix/virtual-mailbox-users.conf
 chmod 640 /etc/postfix/virtual-alias-maps.conf
 
-systemctl restart --quiet mariadb postfix dovecot
-if systemctl is-active --quiet mariadb postfix dovecot; then
-  printf "${BGreen}-------------SERVICES ARE RUNNING----------------"
+postfix_status=$(systemctl is-active --quiet postfix && echo "active" || echo "inactive")
+mariadb_status=$(systemctl is-active --quiet mariadb && echo "active" || echo "inactive")
+dovecot_status=$(systemctl is-active --quiet dovecot && echo "active" || echo "inactive")
+
+if [[ "$postfix_status" == "active" && "$mariadb_status" == "active" && "$dovecot_status" == "active" ]]; then
+  printf " ------------SERVICES ARE RUNNING-------------  \n"
+  printf "|              SCRIPT COMPLETED                |\n"
+  printf " ---------------------------------------------- \n"
 else
-  printf "${BRed}--------------------ERROR-----------------------"
+  printf " ------------SERVICES ARE RUNNING-------------- \n"
+  printf "|            ONE OR MORE SERVICES FAILED       |\n"
+  printf " ---------------------------------------------- \n"
+  printf "Postfix status: $postfix_status\n"
+  printf "MariaDB status: $mariadb_status\n"
+  printf "Dovecot status: $dovecot_status\n"
 fi
 
 ### WHEN COMPLETE
