@@ -342,8 +342,10 @@ if systemctl is-active --quiet mariadb postfix dovecot; then
   printf "${BGreen}-------------SERVICES ARE RUNNING----------------"
 else
   printf "${BRed}--------------------ERROR-----------------------"
+fi
 
 ### WHEN COMPLETE
 printf "${White} ---------------------------------------------- ${Color_Off}\n"
 printf "${White}|              SCRIPT COMPLETED                |${Color_Off}\n"
 printf "${White} ---------------------------------------------- ${Color_Off}\n"
+
