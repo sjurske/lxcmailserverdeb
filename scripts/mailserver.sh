@@ -13,8 +13,7 @@ systemctl start dovecot && systemctl enable dovecot
 printf "${BGreen}----------Creating virtual mail user...---------${Color_Off}\n"
 export PATH="$PATH:/sbin:/usr/sbin:usr/local/sbin"
 mkdir /home/vmail
-adduser -u 5000 vmail -d /home/vmail/
-addgroup -g 5000 vmail
+useradd vmail
 usermod -a -G vmail vmail
 chown -R vmail:vmail /home/vmail/
 printf "${BGreen}----------Creating Dovecot SSL Cert...----------${Color_Off}\n"
