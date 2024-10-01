@@ -12,8 +12,8 @@ systemctl start postfix && systemctl enable postfix
 systemctl start dovecot && systemctl enable dovecot
 printf "${BGreen}----------Creating virtual mail user...---------${Color_Off}\n"
 mkdir /home/vmail
-useradd -u 5000 vmail -d /home/vmail/
-groupadd -g 5000 vmail
+adduser -u 5000 vmail -d /home/vmail/
+addgroup -g 5000 vmail
 usermod -a -G vmail vmail
 chown -R vmail:vmail /home/vmail/
 printf "${BGreen}----------Creating Dovecot SSL Cert...----------${Color_Off}\n"
