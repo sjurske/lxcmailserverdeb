@@ -11,6 +11,7 @@ systemctl start mariadb && systemctl enable mariadb
 systemctl start postfix && systemctl enable postfix
 systemctl start dovecot && systemctl enable dovecot
 printf "${BGreen}----------Creating virtual mail user...---------${Color_Off}\n"
+export PATH="$PATH:/sbin:/usr/sbin:usr/local/sbin"
 mkdir /home/vmail
 adduser -u 5000 vmail -d /home/vmail/
 addgroup -g 5000 vmail
